@@ -8,11 +8,74 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+<h3>Test Cascading value by type - IsFixed="false"</h3>
+
+<CascadingValue Value="@currentCount">
+    <FooComponent></FooComponent>
+</CascadingValue>
+
+
+<h3>Test Cascading value by type - IsFixed="true"</h3>
+
+<CascadingValue Value="@currentCount" IsFixed="true">
+    <FooComponent></FooComponent>
+</CascadingValue>
+
+<h3>Test Cascading value by type - 2 different types - FruitName = @FruitName</h3>
+
+<CascadingValue Value="@FruitName">
+    <CascadingValue Value="@FruitCount">
+        <Fruit></Fruit>
+    </CascadingValue>
+</CascadingValue>
+
+<h3>Test Cascading value by type - 2 different types - FirstFruit = @FirstFruit - SecondFruit = @SecondFruit</h3>
+
+<CascadingValue Value="@FirstFruit">
+    <CascadingValue Value="@SecondFruit">
+        <Fruit></Fruit>
+    </CascadingValue>
+</CascadingValue>
+
+<h3>Test Cascading value by name - FirstFruit = @FirstFruit - SecondFruit = @SecondFruit</h3>
+
+<CascadingValue Value="@FirstFruit" Name="FirstFruit">
+    <CascadingValue Value="@SecondFruit" Name="SecondFruit">
+        <FruitByName></FruitByName>
+    </CascadingValue>
+</CascadingValue>
+
+<h3>Using Events to update from child</h3>
+
+<CascadingValue Value="@Fruit">
+    <FruitBowl OnFruitChange="ChangeFruit"></FruitBowl>
+    <LunchBox></LunchBox>
+</CascadingValue>
+
+<h3>Using Dispenser from this</h3>
+
+<FruitDispenser></FruitDispenser>
+
 @code {
+
+    string FruitName { get; set; } = "Apple";
+    int FruitCount { get; set; } = 111;
+
+    string FirstFruit { get; set; } = "Apple";
+    string SecondFruit { get; set; } = "Banana";
+
     private int currentCount = 0;
 
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    private string Fruit { get; set; } = "Kiwi";
+
+    private void ChangeFruit(string newFruit)
+    {
+        Fruit = newFruit;
+        StateHasChanged();
     }
 }

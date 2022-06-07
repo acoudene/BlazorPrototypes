@@ -1,0 +1,18 @@
+﻿<h4>FruitBowl Component</h4>
+
+<p>Bowl contains @Fruit</p>
+
+<button @onclick="ChangeFruit">Change Fruit</button>
+
+@code {
+
+    [CascadingParameter] string Fruit { get; set; }
+
+    [Parameter] public Action<string> OnFruitChange { get; set; }
+
+    private void ChangeFruit()
+    {
+        OnFruitChange?.Invoke("Pineapple");
+    }
+
+}

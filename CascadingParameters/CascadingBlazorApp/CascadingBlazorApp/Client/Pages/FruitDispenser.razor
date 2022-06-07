@@ -1,0 +1,16 @@
+﻿<!-- FruitDispenser Component -->
+
+<CascadingValue Value="this">
+    <FruitBowlWithDispenser></FruitBowlWithDispenser>
+    <LunchBoxWithDispenser></LunchBoxWithDispenser>
+</CascadingValue>
+
+@code {
+    public string Fruit { get; private set; } = "Kiwi";
+
+    public void ChangeFruit(string newFruit)
+    {
+        Fruit = newFruit;
+        StateHasChanged();
+    }
+}
