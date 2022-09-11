@@ -1,0 +1,24 @@
+﻿@page "/authentication/{action}"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+<RemoteAuthenticatorView Action="@Action" ApplicationPaths="@ApplicationPath" />
+
+@code {
+  [Parameter] public string? Action { get; set; }
+
+  private RemoteAuthenticationApplicationPathsOptions ApplicationPath { get; set; }
+  
+  public Authentication()
+  {    
+    ApplicationPath = new RemoteAuthenticationApplicationPathsOptions()
+      {
+        LogInPath = "auth/login",
+        LogInFailedPath = @"https://localhost:7160/auth/login-failed"
+
+      };
+  }
+  
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+  }
+}
