@@ -39,7 +39,7 @@ app.MapWhen(ctx => ctx.Request.Host.Port == 7052 ||
       first.Use((ctx, nxt) =>
       {
         ctx.Request.Path = "/FirstApp" + ctx.Request.Path;
-        return nxt();
+        return nxt(ctx);
       });
 
       first.UseBlazorFrameworkFiles("/FirstApp");
@@ -61,7 +61,7 @@ app.MapWhen(ctx => ctx.Request.Host.Port == 7207 ||
       second.Use((ctx, nxt) =>
       {
         ctx.Request.Path = "/SecondApp" + ctx.Request.Path;
-        return nxt();
+        return nxt(ctx);
       });
 
       second.UseBlazorFrameworkFiles("/SecondApp");
