@@ -2,6 +2,6 @@
 {
   public interface IMyDependency
   {
-    public int MyProperty { get; }
+    public string MyDependencyProperty { get; }
   }
 }

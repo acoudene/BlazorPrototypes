@@ -2,6 +2,6 @@
 {
   public interface IMyProvider
   {
-    IMyDependency MyProperty { get; }
+    IMyDependency MyDependency { get; }
   }
 }

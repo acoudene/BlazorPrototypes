@@ -4,18 +4,15 @@ namespace InjectionApp.Client.Services
 {
   public class MyProvider : IMyProvider
   {
-    private IMyOtherDependency _myOtherDependency;
-
-    [Inject]
-    public IMyDependency MyProperty { get; set; }
+    public IMyDependency MyDependency { get; private set; }
 
     /// <summary>
     /// Constructor
     /// </summary>
     /// <param name="name"></param>
-    public MyProvider(IMyOtherDependency myOtherDependency)
+    public MyProvider(IMyDependency myDependency)
     {
-      _myOtherDependency = myOtherDependency;
+      MyDependency = myDependency;
     }
   }
 }

@@ -2,7 +2,7 @@
 {
   public class MyDependency : IMyDependency
   {
-    public int MyProperty { get; set; }
+    public string MyDependencyProperty { get; set; } = Guid.NewGuid().ToString();
   }
 }
 
