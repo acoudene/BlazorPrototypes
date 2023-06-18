@@ -132,7 +132,6 @@ builder.Services.AddTransient<IMyDependency, MyDependency>();
 var host = builder.Build();
 var myProvider = host.Services.GetRequiredService<IMyProvider>();
 Console.WriteLine($"(Good practice) Provider: Transient - Dependency: Transient => Dependency Property: {myProvider.MyDependency.MyDependencyProperty}");
-await host.RunAsync();
 
 // Result sample:
 // (Good practice) Provider: Singleton - Dependency: Singleton => Dependency Property: 0342c5cf - 00a0 - 4406 - 9970 - ff659a02987b
@@ -144,3 +143,31 @@ await host.RunAsync();
 // (Good practice) Provider: Transient - Dependency: Singleton => Dependency Property: d25751bf - e746 - 41a2 - 84af - f3e5dc6e76a4
 // (Good practice) Provider: Transient - Dependency: Scoped => Dependency Property: 80975183 - 5649 - 4253 - bc4b - 5f0cc79e17ac
 // (Good practice) Provider: Transient - Dependency: Transient => Dependency Property: b0d6c08f - f2d6 - 4552 - b181 - 38b034fc8769
+
+// Autres injections
+{
+  // Use [Inject] attribute, only activated for razor page, does not work in IServiceCollection
+  var builderTest = WebAssemblyHostBuilder.CreateDefault(args);
+
+  builderTest.Services.AddTransient<IMyDependency, MyRazorDependency>();
+  builderTest.Services.AddSingleton<IMyProvider, MyRazorProvider>();
+
+  var hostTest = builderTest.Build();
+  var myProviderTest = hostTest.Services.GetRequiredService<IMyProvider>();
+
+  // Expected trace: myProviderTest is not null but myProviderTest.MyDependency is null
+  Console.WriteLine($"myProviderTest is not null but myProviderTest.MyDependency is {(myProviderTest.MyDependency?.MyDependencyProperty ?? "null")}");
+}
+
+
+// Conseils :
+// -	L’IoC/DI via IServiceCollection ne sait faire que de l’injection par constructeur.
+// -	L’attribut @inject (razor) ou[Inject](C# code-behind razor page) ne fonctionne que pour le DI effectué dans une page Razor mais est inopérant via IServiceCollection (donc la propriété aura null comme dans ton cas.
+// -	Il ne faut pas utiliser des portées de type static ou[ThreadStatic] dans les objets que l’on veut injecter, même pour des objets de type helper/outils. Il est préférable d’utiliser le moteur d’IoC/DI pour les marquer à Singleton.
+// -	Il ne faut pas injecter une portée Scoped dans une instance Singleton.
+// - 	Enfin, lorsqu’on utilise un contexte nullable, il est important de marquer une propriété injectée par [Inject] avec l’opérateur null-forgiving (ou null indulgent) !
+// - Exemple:
+//   [Inject]
+//   public IMyDependency MyDependency { get; set; } = default!;
+
+await host.RunAsync();
