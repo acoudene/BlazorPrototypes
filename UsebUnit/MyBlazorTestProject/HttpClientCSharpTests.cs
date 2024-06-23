@@ -25,5 +25,20 @@ public class HttpClientCSharpTests : TestContext
     
     // Assert
     cut.WaitForAssertion(() => cut.Find("li").MarkupMatches(@"<li>anthony.coudene@gmail.com</li>"),TimeSpan.FromSeconds(5));   
-  } 
+  }
+
+  [Fact]
+  public void TestBasicOtherWritting()
+  {
+    // Arrange
+    var mock = Services.AddMockHttpClient();
+    mock.When("/getData").RespondJson(new List<UserInfo> { new UserInfo() { Email = @"anthony.coudene@gmail.com", UserId = "ACE" } });
+
+    // Act
+    var cut = RenderComponent<ComponentExpectedHttpClient>();
+    cut.WaitForState(() => cut.Find("ul").TextContent.Equals(@"anthony.coudene@gmail.com"), TimeSpan.FromSeconds(5));
+
+    // Assert
+    cut.Find("li").MarkupMatches(@"<li>anthony.coudene@gmail.com</li>");
+  }
 }
