@@ -1,0 +1,22 @@
+﻿<h3>ComponentExpectedHttpClient</h3>
+
+<ul>
+@foreach (var user in _users)
+{
+  <li>@user.Email</li>
+}
+</ul>
+
+@code {
+
+  [Inject]
+  public HttpClient MyClient { get; set; } = null!;
+
+  private List<UserInfo> _users = Enumerable.Empty<UserInfo>().ToList();
+
+  protected override async Task OnInitializedAsync()
+  {
+    _users = await MyClient.GetFromJsonAsync<List<UserInfo>>("/getData") 
+      ?? Enumerable.Empty<UserInfo>().ToList();    
+  }
+}

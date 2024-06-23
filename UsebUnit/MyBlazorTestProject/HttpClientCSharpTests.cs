@@ -2,6 +2,8 @@ using BlazorApp.Client.Pages;
 using RichardSzalay.MockHttp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Collections.Generic;
+using BlazorApp.Client;
+using System;
 
 namespace MyBlazorTestProject;
 
@@ -15,14 +17,13 @@ public class HttpClientCSharpTests : TestContext
   public void TestBasic()
   {
     // Arrange
-    // TODO
-    //var mock = Services.AddMockHttpClient();
-    //mock.When("/getData").RespondJson(new List<Data> { ... });
+    var mock = Services.AddMockHttpClient();
+    mock.When("/getData").RespondJson(new List<UserInfo> { new UserInfo() { Email = @"anthony.coudene@gmail.com", UserId = "ACE" } });
 
     // Act
-    //var cut = RenderComponent<Auth>();
-
+    var cut = RenderComponent<ComponentExpectedHttpClient>();
+    
     // Assert
-    //cut.Find("h1").MarkupMatches(@"<h1>You are authenticated</h1>");
+    cut.WaitForAssertion(() => cut.Find("li").MarkupMatches(@"<li>anthony.coudene@gmail.com</li>"),TimeSpan.FromSeconds(5));   
   } 
 }
