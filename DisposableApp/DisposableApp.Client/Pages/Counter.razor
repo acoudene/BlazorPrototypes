@@ -1,0 +1,126 @@
+﻿@page "/counter"
+@using Alteva.Blazor.JsEvent.Model
+@using Alteva.Blazor.JsEvent.Services
+@using DisposableApp.Client.Services
+
+@rendermode InteractiveWebAssembly
+
+@implements IDisposable
+@implements IAsyncDisposable
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @_currentCount</p>
+<p role="status">Injected property: @InjectedServiceExample.MyProperty</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<p role="status">@_keyDownValue</p>
+
+@code {
+  [Inject]
+  private InjectedServiceExample InjectedServiceExample { get; set; } = null!;
+
+  [Inject]
+  private JsEventService JsEventService { get; set; } = null!;
+
+  private int _currentCount = 0;
+  private string _keyDownValue = string.Empty;
+
+  protected override async Task OnInitializedAsync()
+  {
+    await JsEventService.AddKeyEventHandler();
+    JsEventService.OnKeyDown += JsEventService_OnKeyDown;
+  }
+
+  private bool JsEventService_OnKeyDown(JsKeyboardEventArgs arg)
+  {
+    _keyDownValue = arg.Key;
+    return true;    
+  }
+
+  private void IncrementCount()
+  {
+    _currentCount++;
+  }
+
+  #region IDisposable
+  private bool _disposedValue = false;
+
+  protected virtual void Dispose(bool disposing)
+  {
+    if (!_disposedValue)
+    {
+      if (disposing)
+      {
+        // Do managed disposes
+        JsEventService.OnKeyDown -= JsEventService_OnKeyDown;
+
+        if (!_disposedAsync)
+        {
+          if (JsEventService is not null)
+          {
+            JsEventService.DisposeAsync()
+                .AsTask()
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
+
+          }
+        }
+
+        JsEventService = null!;
+      }
+
+      // Do unmanaged disposes
+
+      _disposedValue = true;
+    }
+  }
+
+  public void Dispose()
+  {
+    // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+    Dispose(disposing: true);
+    GC.SuppressFinalize(this);
+  }
+
+  #region IAsyncDisposable
+  private bool _disposedAsync = false;
+
+  public async ValueTask DisposeAsync()
+  {
+    if (_disposedValue)
+    {
+      return;
+    }
+
+    if (_disposedAsync)
+    {
+      return;
+    }
+
+    await DisposeAsyncCore().ConfigureAwait(false);
+
+    _disposedAsync = true;
+
+    Dispose(disposing: false);
+    GC.SuppressFinalize(this);
+  }
+
+  protected virtual async ValueTask DisposeAsyncCore()
+  {
+    JsEventService.OnKeyDown -= JsEventService_OnKeyDown;
+
+    if (JsEventService is not null)
+    {
+      await JsEventService.DisposeAsync().ConfigureAwait(false);
+    }
+
+    JsEventService = null!;
+  }
+  #endregion
+  #endregion
+}

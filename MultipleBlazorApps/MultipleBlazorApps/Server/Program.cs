@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.ResponseCompression;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -33,15 +31,13 @@ app.UseHttpsRedirection();
 //app.MapControllers();
 //app.MapFallbackToFile("index.html");
 
-app.MapWhen(ctx => ctx.Request.Host.Port == 7052 ||
-    ctx.Request.Host.Equals("firstapp.com"), first =>
+app.MapWhen(
+    ctx =>
+    ctx.Request.Path.StartsWithSegments("/FirstApp", StringComparison.OrdinalIgnoreCase)
+    || ctx.Request.Host.Port == 7052
+    || ctx.Request.Host.Equals("firstapp.com"),
+    first =>
     {
-      first.Use((ctx, nxt) =>
-      {
-        ctx.Request.Path = "/FirstApp" + ctx.Request.Path;
-        return nxt(ctx);
-      });
-
       first.UseBlazorFrameworkFiles("/FirstApp");
       first.UseStaticFiles();
       first.UseStaticFiles("/FirstApp");
@@ -55,15 +51,13 @@ app.MapWhen(ctx => ctx.Request.Host.Port == 7052 ||
       });
     });
 
-app.MapWhen(ctx => ctx.Request.Host.Port == 7207 ||
-    ctx.Request.Host.Equals("secondapp.com"), second =>
+app.MapWhen(
+    ctx => 
+    ctx.Request.Path.StartsWithSegments("/SecondApp", StringComparison.OrdinalIgnoreCase) 
+    || ctx.Request.Host.Port == 7207 
+    || ctx.Request.Host.Equals("secondapp.com"), 
+    second =>
     {
-      second.Use((ctx, nxt) =>
-      {
-        ctx.Request.Path = "/SecondApp" + ctx.Request.Path;
-        return nxt(ctx);
-      });
-
       second.UseBlazorFrameworkFiles("/SecondApp");
       second.UseStaticFiles();
       second.UseStaticFiles("/SecondApp");
@@ -76,5 +70,4 @@ app.MapWhen(ctx => ctx.Request.Host.Port == 7207 ||
             "SecondApp/index.html");
       });
     });
-
 app.Run();
