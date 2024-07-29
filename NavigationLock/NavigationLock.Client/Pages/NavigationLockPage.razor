@@ -1,0 +1,24 @@
+﻿@page "/NavigationLock"
+ 
+@code {
+    [Inject] IJSRuntime? JsRuntime { get; set; }
+    private bool ConfirmExternalNavigation { get; set; } = true;
+ 
+    private async Task OnBeforeInternalNavigation(LocationChangingContext locationChangingContext)
+    {
+        if (JsRuntime is null) return;
+        var continueNavigationEvent = await JsRuntime.InvokeAsync<bool>("confirm", $"{nameof(OnBeforeInternalNavigation)} caught this navigation event! Do you want to continue?");
+        if (!continueNavigationEvent) locationChangingContext.PreventNavigation();
+    }
+}
+ 
+<NavigationLock ConfirmExternalNavigation="@ConfirmExternalNavigation" OnBeforeInternalNavigation="@OnBeforeInternalNavigation"></NavigationLock>
+ 
+<PageTitle>Navigation Lock Demo</PageTitle>
+ 
+<h3>Navigation Lock Demo</h3>
+<p>From now, try to change navigation by clicking on a link. 
+If you click on internal link of this server, then, OnBeforeInternalNavigation event will be call.
+If you click on external link like 'About' set to target='_self' then, navigation will only be prevented if ConfirmExternalNavigation is set to true else navigation will be done.</p>
+<label for="confirm-external-navigation-checkbox">Confirm External Navigation</label>
+<input id="confirm-external-navigation-checkbox" type="checkbox" @bind="@ConfirmExternalNavigation">

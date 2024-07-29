@@ -23,10 +23,13 @@ namespace MyBlazorTestProject
       var cut = RenderComponent<TestCounter>();
 
       // Act - click button to increment counter
-      cut.Find("button").Click();
+      for (int i = 0; i < 10; i++)
+      {
+        cut.Find("button").Click();
+      }
 
       // Assert that the counter was incremented
-      cut.Find("p").MarkupMatches("<p>Current count: 1</p>");
+      cut.Find("p").MarkupMatches("<p>Current count: 10</p>");
     }
   }
 }
