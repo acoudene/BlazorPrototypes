@@ -1,6 +1,7 @@
 ﻿@page "/starship-11"
 @using System.ComponentModel.DataAnnotations
 @using FieldValidationBlazorApp.Client.Components
+@using FieldValidationBlazorApp.Client.Properties
 @inject ILogger<Starship11> Logger
 
 <EditForm Model="Model" OnValidSubmit="Submit" FormName="Starship11">
@@ -35,7 +36,7 @@
     public class Starship
     {
         [Required]
-        [StringLength(10, ErrorMessage = "Id is too long.")]
+        [StringLength(10, ErrorMessage = "Id is too long.", ErrorMessageResourceType = typeof(Resources))]
         public string? Id { get; set; }
     }
 }

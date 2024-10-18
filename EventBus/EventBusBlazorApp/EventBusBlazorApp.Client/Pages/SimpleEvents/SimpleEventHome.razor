@@ -1,0 +1,13 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Simple Events</h1>
+
+<MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick=@(async () => await OnClickAsync())>Click here...</MudButton>
+
+<MudPaper Width="250px" Elevation="3">
+  <MudNavMenu Rounded="true" Margin="Margin.Dense" Color="Color.Primary" Class="pa-2">
+    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Science" Href="/eventbus">EventBus demo link</MudNavLink>
+  </MudNavMenu>
+</MudPaper>

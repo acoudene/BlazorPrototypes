@@ -1,0 +1,111 @@
+﻿@using MudBlazor
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<PageTitle>Features</PageTitle>
+
+<MudTable T="EntityVo" Items="@EntityVos"
+          MultiSelection="true"
+          Hover="true"
+          FixedFooter="true"
+          FixedHeader="true"
+          Filter="new Func<EntityVo,bool>(FilterFunc)"
+          ReadOnly="false"
+          Dense="true"
+          CanCancelEdit="true"
+          OnCommitEditClick="@(() => Snackbar?.Add("Item mis à jour"))"
+          @bind-SelectedItems="_selectEntityVos">
+  <ToolBarContent>
+    <MudText Typo="Typo.h6">Administration</MudText>
+    <MudSpacer />
+    <MudTextField @bind-Value="_searchString" Placeholder="Recherche" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+  </ToolBarContent>
+  <HeaderContent>
+    <MudTh>Id</MudTh>
+    <MudTh>
+      <MudTableSortLabel SortBy="new Func<EntityVo, object>(x=>x.Code)">Code</MudTableSortLabel>
+    </MudTh>
+  </HeaderContent>
+  <RowTemplate>
+      <MudTd DataLabel="Id">@context.Id</MudTd>
+      <MudTd DataLabel="Code">@context.Code</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+     <MudTd DataLabel="Id"><MudTextField @bind-Value="@context.Id" /></MudTd>
+     <MudTd DataLabel="Code"><MudTextField @bind-Value="@context.Code" /></MudTd>
+   </RowEditingTemplate>
+   <PagerContent>
+     <MudTablePager PageSizeOptions="new int[] { 5, 10 }" />
+     <MudGrid>
+       <MudItem>
+         <MudTextField Margin="Margin.Dense" @bind-Value="@_codeAdd" Label="Code à ajouter" Variant="Variant.Outlined"></MudTextField>
+       </MudItem>
+       <MudItem>
+         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick=@AddNewItem>Ajouter</MudButton>
+       </MudItem>
+       <MudItem>
+         <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick=@RemoveSelectedItems>Supprimer multisélection</MudButton>
+       </MudItem>
+     </MudGrid>
+   </PagerContent>
+ </MudTable>
+
+@code {
+
+  [Inject]
+  protected ISnackbar? Snackbar { get; set; }
+
+  [Parameter, EditorRequired]
+  public List<EntityVo> EntityVos { get; set; } = null!;
+
+  private HashSet<EntityVo>? _selectEntityVos;
+
+  private string _searchString = string.Empty;
+  private string _codeAdd = string.Empty;
+
+  protected override void OnInitialized()
+  {
+    if (EntityVos is null) throw new InvalidOperationException($"Missing injected {nameof(EntityVos)}");
+  }
+
+  protected void AddNewItem()
+  {
+    if (string.IsNullOrWhiteSpace(_codeAdd))
+    {
+      Snackbar?.Add("Il faut saisir un code");
+      return;
+    }
+
+    if (EntityVos.Any(vo => vo.Code is not null && vo.Code.Equals(_codeAdd, StringComparison.OrdinalIgnoreCase)))
+    {
+      Snackbar?.Add($"Le code {_codeAdd} existe déjà !");
+      return;
+    }
+
+    EntityVos.Add(new EntityVo() { Id = Guid.NewGuid(), Code = _codeAdd });
+    Snackbar?.Add($"L'item {_codeAdd} a été ajouté");
+  }
+
+  protected void RemoveSelectedItems()
+  {
+    if (_selectEntityVos is null || !_selectEntityVos.Any())
+      return;
+
+
+    var toRemoveIds = _selectEntityVos.Select(vo => vo.Id);
+    EntityVos.RemoveAll(vo => toRemoveIds.Contains(vo.Id));
+  }
+
+  private bool FilterFunc(EntityVo vo)
+  {
+    return vo switch
+    {
+      EntityVo x when !string.IsNullOrWhiteSpace(x.Id) && x.Id.Contains(_searchString, StringComparison.OrdinalIgnoreCase) => true,
+      EntityVo x when !string.IsNullOrWhiteSpace(x.Code) && x.Code.Contains(_searchString, StringComparison.OrdinalIgnoreCase) => true,
+      null => false,
+      var other => false
+    };
+  }
+}

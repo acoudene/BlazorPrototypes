@@ -3,5 +3,13 @@
 <p>Lunch box contains @FruitDispenser.Fruit</p>
 
 @code {
-    [CascadingParameter] FruitDispenser FruitDispenser { get; set; }
+  [CascadingParameter, EditorRequired] FruitDispenser FruitDispenser { get; set; } = null!;
+
+  protected override Task OnInitializedAsync()
+  {
+    if (FruitDispenser is null)
+      throw new InvalidOperationException("Null parameter: FruitDispenser");
+
+    return Task.CompletedTask;
+  }
 }

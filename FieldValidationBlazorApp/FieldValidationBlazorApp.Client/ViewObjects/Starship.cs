@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FieldValidationBlazorApp.Client.Properties;
+using System.ComponentModel.DataAnnotations;
 
 namespace FieldValidationBlazorApp.Client.ViewObjects;
 
 public class Starship
 {
     [Required]
-    [StringLength(16, ErrorMessage = "Identifier too long (16 character limit).")]
+    [StringLength(16, ErrorMessage = "Identifier too long (16 character limit).", ErrorMessageResourceType = typeof(Resources))]
     public string? Id { get; set; }
 
     public string? Description { get; set; }

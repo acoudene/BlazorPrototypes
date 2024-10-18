@@ -8,22 +8,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddControllersWithViews()
-    .ConfigureApiBehaviorOptions(options =>
-    {
-      options.InvalidModelStateResponseFactory = context =>
-      {
-        if (context.HttpContext.Request.Path == "/StarshipValidation")
-        {
-          return new BadRequestObjectResult(context.ModelState);
-        }
-        else
-        {
-          return new BadRequestObjectResult(
-              new ValidationProblemDetails(context.ModelState));
-        }
-      };
-    });
+//builder.Services.AddControllersWithViews()
+//    .ConfigureApiBehaviorOptions(options =>
+//    {
+//      options.InvalidModelStateResponseFactory = context =>
+//      {
+//        if (context.HttpContext.Request.Path == "/StarshipValidation")
+//        {
+//          return new BadRequestObjectResult(context.ModelState);
+//        }
+//        else
+//        {
+//          return new BadRequestObjectResult(
+//              new ValidationProblemDetails(context.ModelState));
+//        }
+//      };
+//    });
 
 var app = builder.Build();
 
@@ -43,7 +43,7 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
-app.MapDefaultControllerRoute();
+//app.MapDefaultControllerRoute();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(FieldValidationBlazorApp.Client._Imports).Assembly);
