@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedDBApp", "IndexedDBApp\IndexedDBApp.csproj", "{F86D8498-E7FF-411A-9B95-158E75799370}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedDBApp.Client", "IndexedDBApp.Client\IndexedDBApp.Client.csproj", "{2629B58E-A331-4732-AB5C-D3A6E7B3175C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F86D8498-E7FF-411A-9B95-158E75799370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86D8498-E7FF-411A-9B95-158E75799370}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86D8498-E7FF-411A-9B95-158E75799370}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86D8498-E7FF-411A-9B95-158E75799370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2629B58E-A331-4732-AB5C-D3A6E7B3175C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2629B58E-A331-4732-AB5C-D3A6E7B3175C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2629B58E-A331-4732-AB5C-D3A6E7B3175C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2629B58E-A331-4732-AB5C-D3A6E7B3175C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75C302FD-2738-40F0-A47A-33CC8EA1AC3B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,85 @@
+﻿@page "/"
+@using Blazor.IndexedDB
+@using IndexedDBApp.Client.Models
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello IndexedDB!</h1>
+<p>
+  <button @onclick=@(async () => await AddNewPersonAsync())>Add New Person in IndexedDB</button>
+</p>
+
+<p>
+  <InputFile OnChange="LoadFiles" multiple />
+</p>
+
+
+
+<QuickGrid Items="_persons.AsQueryable()">
+  <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
+  <PropertyColumn Property="@(p => p.FirstName)" Sortable="true" />
+  <PropertyColumn Property="@(p => p.LastName)" Sortable="true" />
+</QuickGrid>
+
+@code
+{
+  [Inject]
+  public required IIndexedDbFactory DbFactory { get; set; }
+
+  private List<IBrowserFile> _loadedFiles = Enumerable.Empty<IBrowserFile>().ToList();
+
+  private List<Person> _persons = Enumerable.Empty<Person>().ToList();
+
+  private void LoadFiles(InputFileChangeEventArgs e)
+  {
+    var files = e.GetMultipleFiles();
+    foreach (var file in files)
+    {
+      try
+      {
+        _loadedFiles.Add(file);
+      }
+      catch (Exception)
+      {
+        
+      }
+
+    }
+  }
+
+  protected async Task RefreshData()
+  {
+    using (var db = await DbFactory.Create<ExampleDb>())
+    {
+      _persons = db.People.ToList();
+    }
+
+    StateHasChanged();
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      await RefreshData();
+    }
+  }
+
+
+  protected async Task AddNewPersonAsync()
+  {
+    using (var db = await DbFactory.Create<ExampleDb>())
+    {
+      db.People.Add(new Person()
+        {
+          FirstName = "Anthony",
+          LastName = "Coudène"
+        });
+
+      await db.SaveChanges();
+    }
+
+    await RefreshData();
+  }
+}
