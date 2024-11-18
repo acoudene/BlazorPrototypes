@@ -8,13 +8,12 @@
 <h1>Hello IndexedDB!</h1>
 <p>
   <button @onclick=@(async () => await AddNewPersonAsync())>Add New Person in IndexedDB</button>
+  <button @onclick=@(async () => await PurgeDatabaseAsync())>Purge Database</button>
 </p>
 
 <p>
-  <InputFile OnChange="LoadFiles" multiple />
+  <InputFile accept="image/*" OnChange="LoadFilesAsync" multiple />
 </p>
-
-
 
 <QuickGrid Items="_persons.AsQueryable()">
   <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
@@ -22,37 +21,70 @@
   <PropertyColumn Property="@(p => p.LastName)" Sortable="true" />
 </QuickGrid>
 
+<ul>
+  @foreach (var file in _fileStorages.SelectMany(f => f.Files).Select(f => Convert.ToBase64String(f)))
+  {
+    <li><img src="data:image/png;base64,@file" /></li>
+  }
+</ul>
+
+
+
 @code
 {
   [Inject]
-  public required IIndexedDbFactory DbFactory { get; set; }
+  public required IIndexedDbFactory DbFactory { private get; init; }
 
-  private List<IBrowserFile> _loadedFiles = Enumerable.Empty<IBrowserFile>().ToList();
+  private List<FileStorage> _fileStorages = Enumerable.Empty<FileStorage>().ToList();
 
   private List<Person> _persons = Enumerable.Empty<Person>().ToList();
 
-  private void LoadFiles(InputFileChangeEventArgs e)
+  private async Task PurgeDatabaseAsync()
   {
-    var files = e.GetMultipleFiles();
-    foreach (var file in files)
+    using (var db = await DbFactory.Create<MyDatabaseDb>())
     {
-      try
-      {
-        _loadedFiles.Add(file);
-      }
-      catch (Exception)
-      {
-        
-      }
+      db.People?.Clear();
+      db.Files?.Clear();
+      await db.SaveChanges();
+    }
 
+    await RefreshDataAsync();
+  }
+
+  private async Task LoadFilesAsync(InputFileChangeEventArgs e)
+  {
+    var files = e.GetMultipleFiles(maximumFileCount: 1000);
+    foreach (var browserFile in files)
+    {
+      await using MemoryStream fs = new MemoryStream();
+      await browserFile.OpenReadStream(maxAllowedSize: 51200000).CopyToAsync(fs);
+      var file = fs.ToArray();
+
+      var fileStorage = new FileStorage();
+      fileStorage.Files.Add(file);
+      await StoreAsync(fileStorage);      
+    }
+
+    await RefreshDataAsync();
+  }
+
+  protected async Task StoreAsync(FileStorage fileStorage)
+  {
+    using (var db = await DbFactory.Create<MyDatabaseDb>())
+    {
+      db.Files?.Add(fileStorage);
+
+      await db.SaveChanges();
     }
   }
 
-  protected async Task RefreshData()
+
+  protected async Task RefreshDataAsync()
   {
-    using (var db = await DbFactory.Create<ExampleDb>())
+    using (var db = await DbFactory.Create<MyDatabaseDb>())
     {
-      _persons = db.People.ToList();
+      _persons = db.People?.ToList() ?? Enumerable.Empty<Person>().ToList();
+      _fileStorages = db.Files?.ToList() ?? Enumerable.Empty<FileStorage>().ToList();
     }
 
     StateHasChanged();
@@ -62,16 +94,16 @@
   {
     if (firstRender)
     {
-      await RefreshData();
+      await RefreshDataAsync();
     }
   }
 
 
   protected async Task AddNewPersonAsync()
   {
-    using (var db = await DbFactory.Create<ExampleDb>())
+    using (var db = await DbFactory.Create<MyDatabaseDb>())
     {
-      db.People.Add(new Person()
+      db.People?.Add(new Person()
         {
           FirstName = "Anthony",
           LastName = "Coudène"
@@ -80,6 +112,6 @@
       await db.SaveChanges();
     }
 
-    await RefreshData();
+    await RefreshDataAsync();
   }
 }
