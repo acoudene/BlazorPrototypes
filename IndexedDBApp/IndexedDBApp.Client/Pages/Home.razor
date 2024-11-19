@@ -24,7 +24,7 @@
 <ul>
   @foreach (var file in _fileStorages.SelectMany(f => f.Files).Select(f => Convert.ToBase64String(f)))
   {
-    <li><img src="data:image/png;base64,@file" /></li>
+    <img src="data:image/png;base64,@file" width="100px" height="100px" />
   }
 </ul>
 
@@ -105,8 +105,8 @@
     {
       db.People?.Add(new Person()
         {
-          FirstName = "Anthony",
-          LastName = "Coudène"
+          FirstName = Guid.NewGuid().ToString(),
+          LastName = Guid.NewGuid().ToString()
         });
 
       await db.SaveChanges();
@@ -119,5 +119,5 @@
   /// <seealso cref="https://mdn.github.io/dom-examples/indexeddb-api/index.html"/>
   /// Be careful to disable this kind of option in browser to get persisted data after closing: 
   /// Example in edge (in french), go to "Paramètres > Confidentialité [...] > Effacer les données de navigation lors de la fermeture > Cookies et autres [...]"
-  /// Set disable for all or select the right domain to disable
+  /// Set disable for all or select the right 
 }
