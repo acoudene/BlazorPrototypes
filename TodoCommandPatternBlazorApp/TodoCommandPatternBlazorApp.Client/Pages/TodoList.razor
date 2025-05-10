@@ -1,0 +1,47 @@
+﻿@page "/todolist"
+@using System.Collections.Generic
+@using TodoCommandPatternBlazorApp.Client.CommandPattern.Commands
+@using TodoCommandPatternBlazorApp.Client.CommandPattern.Invokers
+@using TodoCommandPatternBlazorApp.Client.CommandPattern.Receivers
+
+<h3>To-Do List</h3>
+
+<input @bind="newItem" placeholder="Add new item" />
+<button @onclick="AddItem">Add</button>
+<button @onclick="UndoLastAction">Undo</button>
+
+<ul>
+  @foreach (var item in items)
+  {
+    <li>@item</li>
+  }
+</ul>
+
+@code {
+  private string newItem = string.Empty;
+  private readonly List<string> items = new List<string>();
+  private readonly TodoListReceiver todoList = new TodoListReceiver();
+  private readonly CommandInvoker invoker = new CommandInvoker();
+  private readonly Stack<ICommand> commandHistory = new Stack<ICommand>();
+
+  private void AddItem()
+  {
+    var command = new AddItemCommand(todoList, newItem);
+    invoker.SetCommand(command);
+    invoker.ExecuteCommand();
+    commandHistory.Push(command);
+    items.Add(newItem);
+    newItem = string.Empty;
+  }
+
+  private void UndoLastAction()
+  {
+    if (commandHistory.Count > 0)
+    {
+      var command = commandHistory.Pop();
+      invoker.SetCommand(command);
+      invoker.UndoCommand();
+      items.RemoveAt(items.Count - 1);
+    }
+  }
+}
