@@ -1,0 +1,88 @@
+﻿@* 
+// Changelogs Date  | Author                | Description
+// 2023-12-23       | Anthony Coudène       | Creation
+ *@
+
+@namespace MyFeature.RazorComponents
+
+@inherits MudTable<MyEntityVo>
+
+<ReliableContent>
+  <div class="MyEntitysTable-container">
+    <MudTable T="MyEntityVo"
+              Items="@ViewObjects"
+              SelectedItem="@SelectedViewObject"
+              SelectedItems="@SelectedViewObjects"
+              MultiSelection="true"
+              Hover="true"
+              FixedFooter="true"
+              FixedHeader="true"
+              Filter="new Func<MyEntityVo,bool>(FilterFunc)"
+              ReadOnly="true"
+              Dense="true"
+              CanCancelEdit="true"
+              SelectedItemsChanged="OnSelectedItemsChanged"
+              Comparer="MyEntityVoComparer">
+      <ToolBarContent>
+        <MudText Typo="Typo.h6">MyEntitys</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Recherche" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+      </ToolBarContent>
+      <HeaderContent>
+        <MudTh>
+          <MudTableSortLabel SortBy="new Func<MyEntityVo, object>(x=>x.Id)">@Localizer["Id"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+          <MudTableSortLabel SortBy="new Func<MyEntityVo, object>(x=>x.CreatedAt)">@Localizer["CreatedAt"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+          <MudTableSortLabel SortBy="new Func<MyEntityVo, object>(x=>x.UpdatedAt)">@Localizer["UpdatedAt"]</MudTableSortLabel>
+        </MudTh>
+
+        @* // TODO - Complete with other fields *@
+
+        <MudTh>
+          <MudTableSortLabel SortBy="new Func<MyEntityVo, object?>(x=>x?.Metadata)">@Localizer["Metadata"]</MudTableSortLabel>
+        </MudTh>
+
+      </HeaderContent>
+      <RowTemplate>
+        <MudTd DataLabel="@Localizer["Id"]">@context.Id</MudTd>
+        <MudTd DataLabel="@Localizer["CreatedAt"]"><MudDatePicker Date="@context.CreatedAt" ReadOnly="true" /></MudTd>
+        <MudTd DataLabel="@Localizer["UpdatedAt"]"><MudDatePicker Date="@context.UpdatedAt" ReadOnly="true" /></MudTd>
+
+        @* // TODO - Complete with other fields *@
+
+        <MudTd DataLabel="@Localizer["Metadata"]">@context.Metadata</MudTd>
+
+      </RowTemplate>
+      <RowEditingTemplate>
+        @*
+        <MudTd DataLabel="Id">
+        <MudTextField @bind-Value="@context.Id"
+        For="@(() => context.Id)"
+        Validation=@(_myEntityValidator.ValidateValue(context, "Id")) />
+        </MudTd>
+        <MudTd DataLabel="CreatedAt">
+        <MudTextField @bind-Value="@context.CreatedAt"
+        For="@(() => context.CreatedAt)"
+        Validation=@(_myEntityValidator.ValidateValue(context, "CreatedAt")) />
+        </MudTd>
+        <MudTd DataLabel="UpdatedAt">
+        <MudTextField @bind-Value="@context.UpdatedAt"
+        For="@(() => context.UpdatedAt)"
+        Validation=@(_myEntityValidator.ValidateValue(context, "UpdatedAt")) />
+        </MudTd>
+        *@
+        @* // TODO - Complete with other fields *@
+
+      </RowEditingTemplate>
+      <PagerContent>
+        <MudTablePager PageSizeOptions="new int[] { 5, 10, 15 }" />
+      </PagerContent>
+    </MudTable>
+  </div>
+</ReliableContent>
+@{
+  base.BuildRenderTree(__builder);
+}

@@ -1,0 +1,53 @@
+﻿# For more info on HTTP files go to https://aka.ms/vs/httpfile
+# Changelogs Date  | Author                | Description
+# 2023-12-23       | Anthony Coudène       | Creation
+
+@schema=https
+@hostname=localhost
+@port=7059
+@baseAddress={{schema}}://{{hostname}}:{{port}}/api/myEntity
+
+GET {{baseAddress}}
+
+###
+
+GET {{baseAddress}}/3fa85f64-5717-4562-b3fc-2c963f66afa9
+
+###
+
+POST {{baseAddress}}
+Content-Type: application/json
+
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa9",
+  "metadata": "Metadata created"
+}
+
+###
+
+PUT {{baseAddress}}/3fa85f64-5717-4562-b3fc-2c963f66afa9
+Content-Type: application/json
+
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa9",
+  "metadata": "Metadata updated"
+}
+
+###
+
+PATCH {{baseAddress}}/3fa85f64-5717-4562-b3fc-2c963f66afa9
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/metadata",
+    "value": "Metadata patched"
+  }
+]
+
+###
+
+DELETE {{baseAddress}}/3fa85f64-5717-4562-b3fc-2c963f66afa9
+
+###

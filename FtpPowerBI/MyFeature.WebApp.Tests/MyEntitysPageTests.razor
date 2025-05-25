@@ -1,0 +1,57 @@
+@* 
+// Changelogs Date  | Author                | Description
+// 2023-12-23       | Anthony Coudène       | Creation   
+*@
+
+@using MyFeature.ViewObjects
+@using MyFeature.WebApp.Client.Extensions
+@using MyFeature.WebApp.Client.Pages
+@using MudBlazor
+@using MudBlazor.Services
+@using RichardSzalay.MockHttp
+@inherits TestContext
+
+@code {
+
+  [Fact]
+  public void WhenGivingOneVo_ThenDisplayOneVo()
+  {
+    // Arrange
+    Uri baseAddressUriForBFF = new Uri(@"http://localhost");
+    Services.AddMudServices();
+    Services.AddLocalization();
+    Services.AddViewModels();    
+    var guid = Guid.NewGuid();
+    var now = DateTimeOffset.UtcNow;
+    var viewObjects = new List<MyEntityVo>()
+      {
+        new MyEntityVo()
+        {
+          Id = guid,
+          CreatedAt = now,
+          UpdatedAt = now
+        }
+      };
+    var mockHandler = Services.AddMockHttpClient(baseAddressUriForBFF);
+    mockHandler
+    .When("/")
+    .RespondJson(viewObjects);
+
+    Services.AddBffClients(baseAddressUriForBFF);
+
+    // Act
+    var cut = Render(@<MyEntitysPage />);
+    //cut.WaitForState(() => cut.FindComponent<MudTable<MyEntityVo>>() is not null, TimeSpan.FromSeconds(5));
+
+    // Assert
+    string expectedValue = $@"<RowTemplate> \
+                                <MudTd DataLabel=\""Id\"">{guid}</MudTd> \
+                                <MudTd DataLabel=\""CreatedAt\"">{now.LocalDateTime}</MudTd> \
+                                <MudTd DataLabel=\""UpdatedAt\"">{now.LocalDateTime}</MudTd> \
+                              </RowTemplate>";
+    cut.WaitForAssertion(() =>
+    cut
+    .FindComponent<MudTable<MyEntityVo>>()
+    .MarkupMatches(expectedValue), TimeSpan.FromSeconds(5));
+  }
+}

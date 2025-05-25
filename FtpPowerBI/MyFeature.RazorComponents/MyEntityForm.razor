@@ -1,0 +1,62 @@
+﻿@* 
+// Changelogs Date  | Author                | Description
+// 2023-12-23       | Anthony Coudène       | Creation
+*@
+
+@inherits MudForm
+
+<ReliableContent>
+  <div class="MyEntityForm-container">
+    <MudForm Model="@ViewObject" Validation="@(_myEntityValidator.ValidateValue)" ValidationDelay="0">
+      <MudCardContent>
+
+        <MudTextField @bind-Value="ViewObject.Id"
+                      For="@(() => ViewObject.Id)"
+                      ReadOnly="true"
+                      Immediate="true"
+                      Label="@Localizer["Id"]" />
+
+        @* These 2 lines below use DateChanged whereas it is readonly mode to illustrate by example.
+        The readonly mode is used due to aggressive update of these dates during repository writting. *@
+
+        <MudDatePicker Date="ViewObject.CreatedAt"
+                       ReadOnly="true"
+                       Label="@Localizer["CreatedAt"]" />
+        @* Add this if updated is expected: DateChanged="(newDate)=>ViewObject.CreatedAt=newDate!.Value" *@
+
+        <MudDatePicker Date="ViewObject.UpdatedAt"
+                       ReadOnly="true"
+                       Label="@Localizer["UpdatedAt"]" />
+        @* Add this if updated is expected: DateChanged="(newDate)=>ViewObject.UpdatedAt=newDate!.Value" *@
+
+        @* // TODO - Complete with other fields *@
+
+        <MudTextField @bind-Value="ViewObject.Metadata"
+                      For="@(() => ViewObject.Metadata)"
+                      ReadOnly="false"
+                      Immediate="true"
+                      Label="@Localizer["Metadata"]" />
+
+      </MudCardContent>
+
+      @* // TODO - Complete with other sub items fields *@
+      @* <MudCardContent Class="pa-0">
+
+      <MudTable Items="@Vo.SubItems" Hover="true" Breakpoint="Breakpoint.None" Dense="@true" Elevation="0">
+      <HeaderContent>
+
+
+      </HeaderContent>
+      <RowTemplate>
+
+
+      </RowTemplate>
+      </MudTable>
+
+      </MudCardContent> *@
+    </MudForm>
+  </div>
+</ReliableContent>
+@{
+  base.BuildRenderTree(__builder);
+}

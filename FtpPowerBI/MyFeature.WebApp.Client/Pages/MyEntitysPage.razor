@@ -1,0 +1,27 @@
+﻿@page "/myEntitys"
+@using Core.RazorComponents
+@using Core.RazorComponents.Mud
+@using MyFeature.RazorComponents
+@using MyFeature.ViewObjects
+
+<ReliableContent LongRunningTask="async () => ViewModel.Items = await ViewModel.GetAllAsync()">
+
+  <PageTitle>@Localizer["MyEntity"]</PageTitle>
+
+  <MyEntitysTable @bind-ViewObjects="@ViewModel.Items" SelectedViewObjects="@ViewModel.SelectedItems" SelectedViewObject="@ViewModel.SelectedItem" OnSelectedItemsChanged="StateHasChanged" />
+
+  <MudGrid Justify="Justify.Center">
+    <MudItem>
+      <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick=@(async () => await AddViewObjectAsync())>@Localizer["Add"]</MudButton>
+    </MudItem>
+    <Condition Predicate="ViewModel.SelectedItems.Count() == 1">
+      <MudItem>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick=@(async () => await UpdateViewObjectAsync())>@Localizer["Update"]</MudButton>
+      </MudItem>
+    </Condition>
+    <MudItem>
+      <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick=@(async () => await RemoveViewObjectAsync())>@Localizer["Delete"]</MudButton>
+    </MudItem>
+  </MudGrid>
+
+</ReliableContent>

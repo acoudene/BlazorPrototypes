@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.0" />
+    <PackageReference Include="MudBlazor" Version="7.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.RazorComponents.Mud\Core.RazorComponents.Mud.csproj" />
+    <ProjectReference Include="..\MyFeature.Localization\MyFeature.Localization.csproj" />
+    <ProjectReference Include="..\MyFeature.ViewObjects.Validation\MyFeature.ViewObjects.Validation.csproj" />
+    <ProjectReference Include="..\MyFeature.ViewObjects\MyFeature.ViewObjects.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+﻿@using Core.RazorComponents
+@using MyFeature.RazorComponents
+
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="new[] 
+{
+typeof(MyEntitysTable).Assembly, 
+typeof(MyEntityForm).Assembly,
+typeof(Condition).Assembly,
+typeof(ForEach<>).Assembly
+}">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+</Router>

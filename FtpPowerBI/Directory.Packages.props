@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <!--<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>-->
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Example: don't miss PackageVersion keyword here and remove Version property in csproj -->
+    <!--<PackageVersion Include="Microsoft.AspNetCore.JsonPatch" Version="9.0.0" />-->
+  </ItemGroup>
+</Project>

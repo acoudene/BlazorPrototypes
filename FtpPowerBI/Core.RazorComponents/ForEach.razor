@@ -1,0 +1,14 @@
+﻿@* 
+// Changelogs Date  | Author                | Description
+// 2023-12-23       | Anthony Coudène       | Creation
+ *@
+
+@typeparam T
+
+@if (Items is not null && ChildContent is not null)
+{
+  @foreach (T item in Items)
+  {
+    @ChildContent(item)
+  }
+}
