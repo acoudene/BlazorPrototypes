@@ -26,7 +26,9 @@ public class MyEntityBffController : ControllerBase
   /// <param name="logger"></param>
   /// <param name="client"></param>
   /// <exception cref="ArgumentNullException"></exception>
-  public MyEntityBffController(ILogger<MyEntityBffController> logger, IMyEntityClient client)
+  public MyEntityBffController(
+    ILogger<MyEntityBffController> logger, 
+    IMyEntityClient client)
   {
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     _client = client ?? throw new ArgumentNullException(nameof(client));

@@ -33,7 +33,9 @@ builder.AddContainer("ftpserver", "stilliard/pure-ftpd:latest")
   .WithEndpoint(port: 30009, targetPort: 30009, name: "ftp-passive-30009")
   .WithEnvironment("FTP_USER_NAME", "ftpuser")
   .WithEnvironment("FTP_USER_PASS", "ftppassword")
-  .WithEnvironment("FTP_USER_HOME", "/home/ftpuser");
+  .WithEnvironment("FTP_USER_HOME", "/home/ftpuser")
+  .WithLifetime(ContainerLifetime.Persistent);
+
 
 /// dotnet tool install -g aspire.cli --prerelease
 /// aspire publish

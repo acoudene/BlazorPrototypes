@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyFeature.Api.BackendForFrontend\MyFeature.Api.BackendForFrontend.csproj" />
+    <ProjectReference Include="..\MyFeature.Proxies.FtpClient\MyFeature.Proxies.Ftp.csproj" />
     <ProjectReference Include="..\MyFeature.Proxies\MyFeature.Proxies.csproj" />
     <ProjectReference Include="..\FtpPowerBI.ServiceDefaults\FtpPowerBI.ServiceDefaults.csproj" />
     <ProjectReference Include="..\MyFeature.WebApp.Client\MyFeature.WebApp.Client.csproj" />

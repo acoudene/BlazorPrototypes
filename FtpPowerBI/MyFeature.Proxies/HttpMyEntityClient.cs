@@ -56,7 +56,7 @@ public class HttpMyEntityClient : IMyEntityClient
   {
     _logger.LogDebug("Processing remote call to {Method}({Dto})...", nameof(CreateAsync), dto);
 
-        await _httpRestClientComponent.CreateAsync(dto, GetConfigurationName(), true, cancellationToken);
+    await _httpRestClientComponent.CreateAsync(dto, GetConfigurationName(), true, cancellationToken);
   }
 
   public virtual async Task CreateOrUpdateAsync(
@@ -65,7 +65,9 @@ public class HttpMyEntityClient : IMyEntityClient
   {
     _logger.LogDebug("Processing call to {Method}({dto})...", nameof(CreateOrUpdateAsync), dto);
 
-        await _httpRestClientComponent.CreateOrUpdateAsync(dto, GetConfigurationName(), true, cancellationToken);
+    await _httpRestClientComponent.CreateOrUpdateAsync(dto, GetConfigurationName(), true, cancellationToken);
+
+
   }
 
   public virtual async Task UpdateAsync(
@@ -75,7 +77,7 @@ public class HttpMyEntityClient : IMyEntityClient
   {
     _logger.LogDebug("Processing remote call to {Method}({Id},{Dto})...", nameof(UpdateAsync), id, dto);
 
-        await _httpRestClientComponent.UpdateAsync(id, dto, GetConfigurationName(), true, cancellationToken);
+    await _httpRestClientComponent.UpdateAsync(id, dto, GetConfigurationName(), true, cancellationToken);
   }
 
   public virtual async Task<MyEntityDto?> DeleteAsync(
@@ -94,6 +96,6 @@ public class HttpMyEntityClient : IMyEntityClient
   {
     _logger.LogDebug("Processing remote call to {Method}({Id},{Patch})...", nameof(PatchAsync), id, patch);
 
-        await _httpRestClientComponent.PatchAsync(id, patch, GetConfigurationName(), true, cancellationToken);
+    await _httpRestClientComponent.PatchAsync(id, patch, GetConfigurationName(), true, cancellationToken);
   }
 }

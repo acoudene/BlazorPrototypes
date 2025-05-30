@@ -109,6 +109,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyFeature.Data.Validation",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyFeature.ViewObjects.Validation", "MyFeature.ViewObjects.Validation\MyFeature.ViewObjects.Validation.csproj", "{1A29596B-B2AC-4C1B-9F10-EA8D2A880CC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFeature.Proxies.Ftp", "MyFeature.Proxies.FtpClient\MyFeature.Proxies.Ftp.csproj", "{A014B495-5EE4-DE86-428F-14DA511055CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -243,6 +245,10 @@ Global
 		{1A29596B-B2AC-4C1B-9F10-EA8D2A880CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A29596B-B2AC-4C1B-9F10-EA8D2A880CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A29596B-B2AC-4C1B-9F10-EA8D2A880CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A014B495-5EE4-DE86-428F-14DA511055CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A014B495-5EE4-DE86-428F-14DA511055CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A014B495-5EE4-DE86-428F-14DA511055CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A014B495-5EE4-DE86-428F-14DA511055CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -281,6 +287,7 @@ Global
 		{F386AB3C-C368-46CF-8CEC-3358C6F409D5} = {84D35090-F675-40B8-9163-345732AA466B}
 		{0F13ABC5-598F-4FE5-ABE2-114A70F98DCE} = {FA2EB524-8289-4F9E-8333-0163B1A3A623}
 		{1A29596B-B2AC-4C1B-9F10-EA8D2A880CC4} = {84D35090-F675-40B8-9163-345732AA466B}
+		{A014B495-5EE4-DE86-428F-14DA511055CB} = {FA2EB524-8289-4F9E-8333-0163B1A3A623}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDDA49FA-B05A-4DB3-9900-4C35F2BAB2C6}
