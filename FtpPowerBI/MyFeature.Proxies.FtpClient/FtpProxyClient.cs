@@ -1,8 +1,11 @@
-﻿using FluentFTP;
+﻿using CsvHelper;
+using FluentFTP;
 using Microsoft.Extensions.Logging;
 using MyFeature.Dtos;
 using Newtonsoft.Json;
+using System.Globalization;
 using System.Net;
+using System.Text;
 
 namespace MyFeature.Proxies.Ftp;
 
@@ -30,9 +33,20 @@ public class FtpProxyClient : HttpMyEntityClient
     await base.CreateOrUpdateAsync(dto, cancellationToken);
     
     var ftpClient = InitializeFtpClient();
-    string json = JsonConvert.SerializeObject(dto);
-    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(json);
+    byte[] buffer = ToCsv(dto);
 
-    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{dto.Id}.json", FtpRemoteExists.Overwrite, true);
+    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{dto.Id}.csv", FtpRemoteExists.Overwrite, true);
+  }
+
+  public virtual byte[] ToCsv(MyEntityDto dto)
+  {
+    using var memoryStream = new MemoryStream();
+    using var writer = new StreamWriter(memoryStream, Encoding.UTF8);
+    using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+    csv.WriteRecord(dto);
+    csv.Flush();
+
+    return memoryStream.ToArray();
   }
 }
