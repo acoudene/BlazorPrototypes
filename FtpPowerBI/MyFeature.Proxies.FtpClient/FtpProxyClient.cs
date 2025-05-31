@@ -1,6 +1,7 @@
 ﻿using FluentFTP;
 using Microsoft.Extensions.Logging;
 using MyFeature.Dtos;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace MyFeature.Proxies.Ftp;
@@ -29,6 +30,9 @@ public class FtpProxyClient : HttpMyEntityClient
     await base.CreateOrUpdateAsync(dto, cancellationToken);
     
     var ftpClient = InitializeFtpClient();
-    ftpClient.UploadFile(@"C:\Temp\fichier.txt", "/fichier.txt");
+    string json = JsonConvert.SerializeObject(dto);
+    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(json);
+
+    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{dto.Id}.json", FtpRemoteExists.Overwrite, true);
   }
 }
