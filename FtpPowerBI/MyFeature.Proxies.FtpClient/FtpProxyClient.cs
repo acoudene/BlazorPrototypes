@@ -10,14 +10,21 @@ namespace MyFeature.Proxies.Ftp;
 
 public class FtpProxyClient : IFtpProxyClient
 {
-  public FtpProxyClient(ILogger<FtpProxyClient> logger)
+  private readonly ILogger<FtpProxyClient> _logger;
+  private readonly NetworkCredential _networkCredential;
+
+  public FtpProxyClient(
+    ILogger<FtpProxyClient> logger,
+    NetworkCredential networkCredential)
   {
+    _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    _networkCredential = networkCredential ?? throw new ArgumentNullException(nameof(networkCredential));
   }
 
   public virtual FtpClient InitializeFtpClient()
   {
     var client = new FtpClient("ftp://localhost");
-    client.Credentials = new NetworkCredential("ftpuser", "ftppassword");
+    client.Credentials = _networkCredential;
     client.Connect();
     return client;
   }
