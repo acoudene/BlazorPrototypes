@@ -1,4 +1,5 @@
-﻿using MyFeature.Proxies;
+﻿using FluentFTP;
+using MyFeature.Proxies;
 using MyFeature.Proxies.Ftp;
 using MyFeature.WebApp.Client.Extensions;
 using System.Net;
@@ -15,6 +16,6 @@ public static class ServiceCollectionsExtensions
 
   public static void AddMyEntityFtpExportClient(this IServiceCollection serviceCollection)
     => serviceCollection
-    .AddTransient<NetworkCredential>(provider => new NetworkCredential("ftpuser", "ftppassword"))
+    .AddTransient(provider => new FtpClient("localhost", "ftpuser", "ftppassword"))
     .AddSingleton<IFtpProxyClient, FtpProxyClient>();
 }

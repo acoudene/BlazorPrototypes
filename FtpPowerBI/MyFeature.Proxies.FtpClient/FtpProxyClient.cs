@@ -11,22 +11,14 @@ namespace MyFeature.Proxies.Ftp;
 public class FtpProxyClient : IFtpProxyClient
 {
   private readonly ILogger<FtpProxyClient> _logger;
-  private readonly NetworkCredential _networkCredential;
+  private readonly FtpClient _ftpClient;
 
   public FtpProxyClient(
     ILogger<FtpProxyClient> logger,
-    NetworkCredential networkCredential)
+    FtpClient ftpClient)
   {
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    _networkCredential = networkCredential ?? throw new ArgumentNullException(nameof(networkCredential));
-  }
-
-  public virtual FtpClient InitializeFtpClient()
-  {
-    var client = new FtpClient("ftp://localhost");
-    client.Credentials = _networkCredential;
-    client.Connect();
-    return client;
+    _ftpClient = ftpClient ?? throw new ArgumentNullException(nameof(ftpClient));
   }
 
   public virtual Task ExportAsync(
@@ -36,10 +28,10 @@ public class FtpProxyClient : IFtpProxyClient
     if (dtos is null || !dtos.Any())
       return Task.CompletedTask;
 
-    var ftpClient = InitializeFtpClient();
+    _ftpClient.Connect();
     byte[] buffer = ToCsv(dtos);
 
-    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{DateTime.Now.ToString("yyyyMMdd-HHmmssf")}.csv", FtpRemoteExists.Overwrite, true);
+    _ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{DateTime.Now.ToString("yyyyMMdd-HHmmssf")}.csv", FtpRemoteExists.Overwrite, true);
     return Task.CompletedTask;
   }
 
