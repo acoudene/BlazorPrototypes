@@ -22,6 +22,9 @@
     <MudItem>
       <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick=@(async () => await RemoveViewObjectAsync())>@Localizer["Delete"]</MudButton>
     </MudItem>
+    <MudItem>
+      <MudButton Variant="Variant.Filled" Color="Color.Dark" OnClick=@(async () => await ExportViewObjectAsync())>@Localizer["Export"]</MudButton>
+    </MudItem>
   </MudGrid>
 
 </ReliableContent>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Mime;
+using MyFeature.Proxies.Ftp;
 
 namespace MyFeature.Api.BackendForFrontend;
 
@@ -19,19 +20,23 @@ public class MyEntityBffController : ControllerBase
 {
   private readonly ILogger<MyEntityBffController> _logger;
   private readonly IMyEntityClient _client;
+  private readonly IFtpProxyClient _ftpProxyClient;
 
   /// <summary>
   /// Constructor
   /// </summary>
   /// <param name="logger"></param>
   /// <param name="client"></param>
+  /// <param name="ftpProxyClient"></param>
   /// <exception cref="ArgumentNullException"></exception>
   public MyEntityBffController(
     ILogger<MyEntityBffController> logger, 
-    IMyEntityClient client)
+    IMyEntityClient client,
+    IFtpProxyClient ftpProxyClient)
   {
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     _client = client ?? throw new ArgumentNullException(nameof(client));
+    _ftpProxyClient = ftpProxyClient ?? throw new ArgumentNullException(nameof(ftpProxyClient));
   }
 
   /// <summary>
@@ -174,5 +179,38 @@ public class MyEntityBffController : ControllerBase
       _logger.LogError(ex, "Internal error");
       return Problem();
     }
+  }
+
+  [HttpPost("Export")]
+  [Consumes(MediaTypeNames.Application.Json)]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public virtual async Task<ActionResult> ExportAsync(
+     [FromBody] List<MyEntityVo> toExportVos,
+     CancellationToken cancellationToken = default)
+  {
+    try
+    {
+      if (toExportVos is null || !toExportVos.Any())
+        return NoContent();
+      
+      var dtos = toExportVos
+        .Select(vo => vo.ToDto())
+        .ToList();
+      await _ftpProxyClient.ExportAsync(dtos, cancellationToken);
+      return NoContent();
+    }
+    catch (ArgumentException ex)
+    {
+      _logger.LogError(ex, "Bad request");
+      return BadRequest();
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "Internal error");
+      return Problem();
+    }
+
   }
 }

@@ -61,4 +61,11 @@ public partial class MyEntitysPage : ComponentBase
     Snackbar.Add(Localizer["Deleted!"]);
     ViewModel.Items = await ViewModel.GetAllAsync();
   }
+
+  protected async Task ExportViewObjectAsync()
+  {    
+    await ViewModel.ExportAsync(ViewModel.SelectedItems.ToList());
+    Snackbar.Add(Localizer["Exported!"]);
+  }
+  
 }

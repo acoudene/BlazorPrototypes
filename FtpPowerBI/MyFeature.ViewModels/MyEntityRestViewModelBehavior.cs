@@ -12,4 +12,9 @@ public class MyEntityRestViewModelBehavior : RestViewModelBehavior<MyEntityVo, I
   public MyEntityRestViewModelBehavior(IMyEntityRestBffClient client) : base(client)
   {
   }
+
+  public async Task ExportAsync(
+    List<MyEntityVo> toExportVos, 
+    CancellationToken cancellationToken = default)
+  => await RestClient.ExportAsync(toExportVos, cancellationToken);
 }

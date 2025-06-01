@@ -9,10 +9,11 @@
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="FluentFTP" Version="52.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyFeature.Proxies\MyFeature.Proxies.csproj" />
+    <ProjectReference Include="..\MyFeature.Dtos\MyFeature.Dtos.csproj" />
   </ItemGroup>
 
 </Project>

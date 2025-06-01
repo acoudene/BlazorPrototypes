@@ -45,4 +45,9 @@ public class MyEntityViewModel : IMyEntityViewModel
 
   public virtual async Task UpdateAsync(Guid id, MyEntityVo updatedItem, CancellationToken cancellationToken = default)
    => await _behavior.UpdateAsync(id, updatedItem, cancellationToken);
+
+  public virtual async Task ExportAsync(
+    List<MyEntityVo> toExportVos, 
+    CancellationToken cancellationToken = default)
+    => await _behavior.ExportAsync(toExportVos, cancellationToken);
 }

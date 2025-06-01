@@ -36,6 +36,7 @@ if (string.IsNullOrWhiteSpace(myEntityApiBaseAddress))
   throw new InvalidOperationException($"Missing value for configuration key: {myEntityApiBaseAddressKey}");
 
 builder.Services.AddMyEntityApiClient(new Uri(myEntityApiBaseAddress));
+builder.Services.AddMyEntityFtpExportClient();
 
 builder.Services.AddMudServices();
 

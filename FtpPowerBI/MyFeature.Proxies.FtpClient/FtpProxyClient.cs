@@ -2,19 +2,15 @@
 using FluentFTP;
 using Microsoft.Extensions.Logging;
 using MyFeature.Dtos;
-using Newtonsoft.Json;
 using System.Globalization;
 using System.Net;
 using System.Text;
 
 namespace MyFeature.Proxies.Ftp;
 
-public class FtpProxyClient : HttpMyEntityClient
+public class FtpProxyClient : IFtpProxyClient
 {
-  public FtpProxyClient(
-    ILogger<HttpMyEntityClient> logger,
-    IHttpClientFactory httpClientFactory)
-    : base(logger, httpClientFactory)
+  public FtpProxyClient(ILogger<FtpProxyClient> logger)
   {
   }
 
@@ -26,27 +22,30 @@ public class FtpProxyClient : HttpMyEntityClient
     return client;
   }
 
-  public override async Task CreateOrUpdateAsync(
-    MyEntityDto dto,
+  public virtual Task ExportAsync(
+    List<MyEntityDto> dtos,
     CancellationToken cancellationToken = default)
   {
-    await base.CreateOrUpdateAsync(dto, cancellationToken);
-    
-    var ftpClient = InitializeFtpClient();
-    byte[] buffer = ToCsv(dto);
+    if (dtos is null || !dtos.Any())
+      return Task.CompletedTask;
 
-    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{dto.Id}.csv", FtpRemoteExists.Overwrite, true);
+    var ftpClient = InitializeFtpClient();
+    byte[] buffer = ToCsv(dtos);
+
+    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{DateTime.Now}.csv", FtpRemoteExists.Overwrite, true);
+    return Task.CompletedTask;
   }
 
-  public virtual byte[] ToCsv(MyEntityDto dto)
+  public virtual byte[] ToCsv(List<MyEntityDto> dtos)
   {
     using var memoryStream = new MemoryStream();
     using var writer = new StreamWriter(memoryStream, Encoding.UTF8);
     using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
-    csv.WriteRecord(dto);
+    csv.WriteRecords(dtos);
     csv.Flush();
 
     return memoryStream.ToArray();
   }
+
 }

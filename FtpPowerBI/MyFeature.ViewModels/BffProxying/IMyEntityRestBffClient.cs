@@ -11,4 +11,5 @@ namespace MyFeature.ViewModels.BffProxying;
 /// </summary>
 public interface IMyEntityRestBffClient : IRestBffClient<MyEntityVo>
 {
+  Task ExportAsync(List<MyEntityVo> toExportVos, CancellationToken cancellationToken = default);
 }

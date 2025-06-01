@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyFeature.Proxies.FtpClient\MyFeature.Proxies.Ftp.csproj" />
     <ProjectReference Include="..\MyFeature.Proxies\MyFeature.Proxies.csproj" />
     <ProjectReference Include="..\MyFeature.ViewObjects\MyFeature.ViewObjects.csproj" />
   </ItemGroup>

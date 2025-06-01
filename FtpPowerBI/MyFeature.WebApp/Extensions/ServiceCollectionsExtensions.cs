@@ -8,7 +8,11 @@ public static class ServiceCollectionsExtensions
 {
   public static void AddMyEntityApiClient(this IServiceCollection serviceCollection, Uri apiUri)
     => serviceCollection
-    .AddClientsWithUri<IMyEntityClient, FtpProxyClient>(
+    .AddClientsWithUri<IMyEntityClient, HttpMyEntityClient>(
       HttpMyEntityClient.ConfigurationName,
       apiUri);
+
+  public static void AddMyEntityFtpExportClient(this IServiceCollection serviceCollection)
+    => serviceCollection
+    .AddSingleton<IFtpProxyClient, FtpProxyClient>();
 }

@@ -99,6 +99,15 @@ public class HttpMyEntityRestBffClient : IMyEntityRestBffClient
 
     await _behavior.PatchAsync(id, patch, GetConfigurationName(), true, cancellationToken);
   }
+
+  public virtual async Task ExportAsync(
+    List<MyEntityVo> toExportVos, 
+    CancellationToken cancellationToken = default)
+  {
+    _logger.LogDebug("Processing call to {Method}({Vos})...", nameof(ExportAsync), toExportVos);
+
+    await _behavior.ExportAsync(toExportVos, GetConfigurationName(), true, cancellationToken);
+  }
 }
 
 
