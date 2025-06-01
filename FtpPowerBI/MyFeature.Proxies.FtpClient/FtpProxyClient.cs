@@ -32,7 +32,7 @@ public class FtpProxyClient : IFtpProxyClient
     var ftpClient = InitializeFtpClient();
     byte[] buffer = ToCsv(dtos);
 
-    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{DateTime.Now}.csv", FtpRemoteExists.Overwrite, true);
+    ftpClient.UploadBytes(buffer, $"{nameof(MyEntityDto)}-{DateTime.Now.ToString("yyyyMMdd-HHmmssf")}.csv", FtpRemoteExists.Overwrite, true);
     return Task.CompletedTask;
   }
 
