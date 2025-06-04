@@ -41,4 +41,6 @@ builder.AddContainer("ftpserver", "stilliard/pure-ftpd:latest")
 /// aspire publish
 builder.AddDockerComposePublisher();
 
+builder.AddProject<Projects.MyFeature_WorkerService>("myfeature-workerservice");
+
 builder.Build().Run();

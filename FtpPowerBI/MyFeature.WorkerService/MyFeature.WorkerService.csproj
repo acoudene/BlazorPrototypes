@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-MyFeature.WorkerService-1e17f2cc-f883-47d2-af2a-4ec54c773f75</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FtpPowerBI.ServiceDefaults\FtpPowerBI.ServiceDefaults.csproj" />
+  </ItemGroup>
+</Project>

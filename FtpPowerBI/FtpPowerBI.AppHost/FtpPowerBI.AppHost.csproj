@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MyFeature.Host\MyFeature.Host.csproj" />
     <ProjectReference Include="..\MyFeature.WebApp\MyFeature.WebApp.csproj" />
+    <ProjectReference Include="..\MyFeature.WorkerService\MyFeature.WorkerService.csproj" />
   </ItemGroup>
 
 </Project>
