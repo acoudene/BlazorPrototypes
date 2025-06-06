@@ -14,5 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FtpPowerBI.ServiceDefaults\FtpPowerBI.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\MyFeature.Proxies.FtpClient\MyFeature.Proxies.Ftp.csproj" />
+    <ProjectReference Include="..\MyFeature.Proxies\MyFeature.Proxies.csproj" />
   </ItemGroup>
 </Project>

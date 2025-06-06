@@ -1,13 +1,26 @@
-﻿namespace MyFeature.WorkerService;
+﻿using Microsoft.Extensions.Options;
+
+namespace MyFeature.WorkerService;
 
 public class PeriodicWorker : BackgroundService
 {
   private readonly ILogger<PeriodicWorker> _logger;
-  private int _executionCount;
+  private readonly ExporterProvider _exporterProvider;
+  private readonly TimerOptions _timerOptions;
 
-  public PeriodicWorker(ILogger<PeriodicWorker> logger)
+  public PeriodicWorker(
+    ILogger<PeriodicWorker> logger,
+    IOptions<TimerOptions> timerOptions,
+    ExporterProvider exporterProvider)
   {
-    _logger = logger;
+    _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    _timerOptions = timerOptions?.Value ?? throw new ArgumentNullException(nameof(timerOptions));
+    _exporterProvider = exporterProvider ?? throw new ArgumentNullException(nameof(exporterProvider));    
+    
+    if (_timerOptions.Period <= TimeSpan.Zero)
+    {
+      throw new ArgumentOutOfRangeException(nameof(timerOptions), "Period period must be greater than zero.");
+    }
   }
 
   protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -15,30 +28,21 @@ public class PeriodicWorker : BackgroundService
     _logger.LogInformation("{Worker} running.", nameof(PeriodicWorker));
 
     // When the timer should have no due-time, then do the work once now.
-    await DoWork();
+    await _exporterProvider.ExecuteAsync(stoppingToken);
 
-    using PeriodicTimer timer = new(TimeSpan.FromSeconds(30));
+    // Use a PeriodicTimer to execute the work at regular intervals.   
+    using PeriodicTimer timer = new(_timerOptions.Period);
 
     try
     {
       while (await timer.WaitForNextTickAsync(stoppingToken))
       {
-        await DoWork();
+        await _exporterProvider.ExecuteAsync(stoppingToken);
       }
     }
     catch (OperationCanceledException)
     {
       _logger.LogInformation("{Worker} is stopping.", nameof(PeriodicWorker));
     }
-  }
-
-  private async Task DoWork()
-  {
-    int count = Interlocked.Increment(ref _executionCount);
-
-    // Simulate work
-    await Task.Delay(TimeSpan.FromSeconds(2));
-
-    _logger.LogInformation("{Worker} is working. Count: {Count}", nameof(PeriodicWorker), count);
   }
 }

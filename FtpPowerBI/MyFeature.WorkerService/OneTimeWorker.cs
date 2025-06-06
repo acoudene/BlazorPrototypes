@@ -3,10 +3,14 @@ namespace MyFeature.WorkerService;
 public class OneTimeWorker : BackgroundService
 {
   private readonly ILogger<OneTimeWorker> _logger;
+  private readonly ExporterProvider _exporterProvider;
 
-  public OneTimeWorker(ILogger<OneTimeWorker> logger)
+  public OneTimeWorker(
+    ILogger<OneTimeWorker> logger,
+    ExporterProvider exporterProvider)
   {
     _logger = logger;
+    _exporterProvider = exporterProvider ?? throw new ArgumentNullException(nameof(exporterProvider));
   }
 
   protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -15,7 +19,8 @@ public class OneTimeWorker : BackgroundService
     {
       _logger.LogInformation("{Worker} running at: {Time}", nameof(OneTimeWorker), DateTimeOffset.Now);
     }
-    
-    await Task.CompletedTask; // Simulate some work being done
+
+    // When the timer should have no due-time, then do the work once now.
+    await _exporterProvider.ExecuteAsync(stoppingToken);
   }
 }
