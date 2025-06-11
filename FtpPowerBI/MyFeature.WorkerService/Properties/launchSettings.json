@@ -2,7 +2,7 @@
   "profiles": {
     "MyFeature.WorkerService": {
       "commandName": "Project",
-      "commandLineArgs": "--periodic true --TimerOptions:Period 00:02:00",
+      "commandLineArgs": "--periodic false",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "MyEntity_API_BASEADDRESS": "https://localhost:7059/api/MyEntity/"

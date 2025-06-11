@@ -5,7 +5,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
 ENV MyEntity_API_BASEADDRESS=https://localhost:7059/api/MyEntity/
-ENV TimerOptions__Period=00:02:00
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build

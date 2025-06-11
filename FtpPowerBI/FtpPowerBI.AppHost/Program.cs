@@ -1,5 +1,3 @@
-using Aspire.Hosting;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 const string databaseName = "myfeature";
@@ -9,17 +7,10 @@ var mongoContainer = builder.AddMongoDB("mongo")
 
 var mongoDatabase = mongoContainer.AddDatabase(databaseName);
 
-builder.AddProject<Projects.MyFeature_Host>("myfeature-host")
-  .WithReference(mongoDatabase)
-  .WaitFor(mongoDatabase);
-
-builder.AddProject<Projects.MyFeature_WebApp>("myfeature-webapp");
-
-
 // FTP
 // docker run --rm -d --name ftpserver -p 21:21 -p 30000-30009:30000-30009 stilliard/pure-ftpd bash /run.sh -c 30 -C 10 -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -R -P localhost -p 30000:30059
 // docker run --rm -d --name ftpserver -p 21:21 -p 30000-30009:30000-30009 -e FTP_USER_NAME=ftpuser -e FTP_USER_PASS=ftppassword -e FTP_USER_HOME=/home/ftpuser stilliard/pure-ftpd
-builder.AddContainer("ftpserver", "stilliard/pure-ftpd:latest")
+var ftpServer = builder.AddContainer("ftpserver", "stilliard/pure-ftpd:latest")
   .WithEndpoint(port: 21, targetPort: 21, name: "ftp")
   .WithEndpoint(port: 30000, targetPort: 30000, name: "ftp-passive-30000")
   .WithEndpoint(port: 30001, targetPort: 30001, name: "ftp-passive-30001")
@@ -36,8 +27,17 @@ builder.AddContainer("ftpserver", "stilliard/pure-ftpd:latest")
   .WithEnvironment("FTP_USER_HOME", "/home/ftpuser")
   .WithLifetime(ContainerLifetime.Persistent);
 
+var myFeatureHost = builder.AddProject<Projects.MyFeature_Host>("myfeature-host")
+  .WithReference(mongoDatabase)
+  .WaitFor(mongoDatabase)
+  .WaitFor(ftpServer);
 
-builder.AddProject<Projects.MyFeature_WorkerService>("myfeature-workerservice", "Container (Dockerfile)");
+builder.AddProject<Projects.MyFeature_WebApp>("myfeature-webapp")
+  .WaitFor(myFeatureHost);
+
+builder.AddProject<Projects.MyFeature_WorkerService>("myfeature-workerservice")
+  .WaitFor(ftpServer)
+  .WaitFor(myFeatureHost);
 
 /// dotnet tool install -g aspire.cli --prerelease
 /// aspire publish

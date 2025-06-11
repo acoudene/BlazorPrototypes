@@ -11,7 +11,10 @@ builder.Configuration
   .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
   .AddCommandLine(args);
 
-// Command Line Options
+///
+/// Command Line Options
+/// Example: dotnet run --periodic true --TimerOptions:Period 00:02:00
+/// 
 var periodicOption = new Option<bool>(
     name: "--periodic",
     description: "Define the periodic mode to use for this service (ex: \"--periodic true\" to activate a periodic worker else one shot)",
@@ -26,6 +29,9 @@ var rootCommand = new RootCommand("MyFeature Worker Service")
   periodOption
 };
 
+///
+/// Add services to the container.
+///
 builder.AddServiceDefaults();
 builder.Services.AddSingleton<ExporterProvider>();
 builder.Services.Configure<TimerOptions>(
@@ -41,28 +47,39 @@ builder.Services.AddSingleton<IFtpProxyClient, FtpProxyClient>();
 builder.Services.AddSingleton(provider => new FtpClient("localhost", "ftpuser", "ftppassword"))
     .AddSingleton<IFtpProxyClient, FtpProxyClient>();
 
-// Set the handler for the root command
+///
+/// Set the handler for the root command
+/// 
 rootCommand.SetHandler(new Func<bool, TimeSpan, Task>(async (periodic, period) =>
 {
-  IHost? host = null;
+  using var cancellationTokenSource = new CancellationTokenSource();
+  Func<CancellationTokenSource, Task> runActionAsync = async cts =>
+  {
+    IHost host = builder.Build();
+    await host.RunAsync(cts.Token);
+  };
 
   if (periodic)
   {
     Console.WriteLine($"Periodic mode enabled");
     builder.Services.AddHostedService<PeriodicWorker>();
-    host = builder.Build();
-    await host.RunAsync();
+    await runActionAsync(cancellationTokenSource);
     return;
   }
 
   Console.WriteLine("Periodic mode disabled. The service will run once.");
-  builder.Services.AddHostedService<OneTimeWorker>();
-  host = builder.Build();
-  await host.StartAsync();
-  await host.StopAsync();
+  builder.Services.AddHostedService<OneTimeWorker>(provider =>
+  new OneTimeWorker(
+    provider.GetRequiredService<ILogger<OneTimeWorker>>(),
+    provider.GetRequiredService<ExporterProvider>(),
+    cancellationTokenSource
+  ));
+  await runActionAsync(cancellationTokenSource);
 }),
 periodicOption,
 periodOption);
 
-// Parse the command line arguments and invoke the handler
+///
+/// Parse the command line arguments and invoke the handler
+/// 
 await rootCommand.InvokeAsync(args);
