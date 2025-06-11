@@ -24,7 +24,7 @@ public class PeriodicWorker : BackgroundService
   }
 
   protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-  {
+  {    
     _logger.LogInformation("{Worker} running.", nameof(PeriodicWorker));
 
     // When the timer should have no due-time, then do the work once now.
@@ -43,6 +43,10 @@ public class PeriodicWorker : BackgroundService
     catch (OperationCanceledException)
     {
       _logger.LogInformation("{Worker} is stopping.", nameof(PeriodicWorker));
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "{Worker} encountered an error.", nameof(PeriodicWorker));      
     }
   }
 }

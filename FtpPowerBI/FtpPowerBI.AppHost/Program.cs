@@ -37,10 +37,10 @@ builder.AddContainer("ftpserver", "stilliard/pure-ftpd:latest")
   .WithLifetime(ContainerLifetime.Persistent);
 
 
+builder.AddProject<Projects.MyFeature_WorkerService>("myfeature-workerservice", "Container (Dockerfile)");
+
 /// dotnet tool install -g aspire.cli --prerelease
 /// aspire publish
 builder.AddDockerComposePublisher();
-
-builder.AddProject<Projects.MyFeature_WorkerService>("myfeature-workerservice");
 
 builder.Build().Run();

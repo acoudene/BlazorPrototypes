@@ -8,6 +8,9 @@
         "MyEntity_API_BASEADDRESS": "https://localhost:7059/api/MyEntity/"
       },
       "dotnetRunMessages": true
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json"
