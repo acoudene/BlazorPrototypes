@@ -1,0 +1,32 @@
+﻿@page "/call-api-timing"
+@inject HttpClient Http
+
+<h3>Appel API avec mesure du temps</h3>
+
+<p><strong>Réponse :</strong> @message</p>
+<p><strong>Temps de réponse :</strong> @elapsedMs ms</p>
+
+<button class="btn btn-primary" @onclick="CallApi">Appeler l'API</button>
+
+@code {
+  private string message = "En attente...";
+  private long elapsedMs = 0;
+
+  private async Task CallApi()
+  {
+    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+    try
+    {
+      var myEntities = await Http.GetStringAsync("api/MyEntity");
+    }
+    catch (Exception ex)
+    {
+      message = $"Erreur : {ex.Message}";
+    }
+
+    stopwatch.Stop();
+    elapsedMs = stopwatch.ElapsedMilliseconds;
+    message = "Réponse reçue avec succès.";
+  }
+}
