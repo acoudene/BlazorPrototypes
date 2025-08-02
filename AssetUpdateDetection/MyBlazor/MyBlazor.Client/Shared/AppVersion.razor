@@ -1,0 +1,12 @@
+﻿@inject HttpClient Http
+
+<p>Version : @version</p>
+
+@code {
+  private string? version;
+
+  protected override async Task OnInitializedAsync()
+  {
+    version = await Http.GetStringAsync("version.json");
+  }
+}
