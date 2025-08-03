@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.18" />
+    <PackageReference Include="MudBlazor" Version="8.10.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +24,11 @@
   <Target Name="GenerateVersionJson" AfterTargets="Build">
     <PropertyGroup>
       <BuildTimestamp>$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</BuildTimestamp>
-      <GeneratedVersion>1.0.0-$(BuildTimestamp)</GeneratedVersion>
+      <GeneratedVersion>
+{ 
+  "version": "1.0.0-$(BuildTimestamp)"
+}
+      </GeneratedVersion>
        <!--Si tu n'utilises pas $(Version), tu peux mettre une date ou un GUID--> 
       <VersionFilePath>wwwroot\version.json</VersionFilePath>
     </PropertyGroup>

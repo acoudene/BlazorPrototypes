@@ -1,12 +1,13 @@
-﻿@inject HttpClient Http
+﻿@using MyBlazor.Client.WorkerServices
+@inject VersionCheckService VersionCheckService 
 
-<p>Version : @version</p>
+<p>Version : @_version</p>
 
 @code {
-  private string? version;
+  private VersionInfo? _version;
 
   protected override async Task OnInitializedAsync()
   {
-    version = await Http.GetStringAsync("version.json");
+    _version = await VersionCheckService.GetLocalVersionAsync();
   }
 }
