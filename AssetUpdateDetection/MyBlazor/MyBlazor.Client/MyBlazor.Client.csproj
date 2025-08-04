@@ -21,6 +21,11 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
   <Target Name="GenerateVersionJson" AfterTargets="Build">
     <PropertyGroup>
       <BuildTimestamp>$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</BuildTimestamp>
