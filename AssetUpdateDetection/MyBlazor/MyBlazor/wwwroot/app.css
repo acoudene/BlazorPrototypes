@@ -49,20 +49,3 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
-
-.update-banner {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #ffc107;
-  color: #000;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-  z-index: 1000;
-}
-
-  .update-banner button {
-    margin-left: 10px;
-    padding: 5px 10px;
-  }
