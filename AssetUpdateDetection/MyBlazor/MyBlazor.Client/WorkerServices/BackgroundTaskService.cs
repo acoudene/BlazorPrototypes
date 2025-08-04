@@ -39,7 +39,7 @@ public class BackgroundTaskService
               config.ActionColor = Color.Primary;
               config.OnClick = async (snackBar) =>
               {
-                await _jsRuntime.InvokeVoidAsync("eval", "caches.keys().then(keys => keys.forEach(key => caches.delete(key))).then(() => location.reload());");
+                await _jsRuntime.InvokeVoidAsync("eval", "caches.keys().then(keys => keys.forEach(key => caches.delete(key))).then(() => location.reload(true));");
               };
             });
           continue;
