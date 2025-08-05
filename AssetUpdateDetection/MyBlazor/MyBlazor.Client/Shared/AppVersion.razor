@@ -1,13 +1,18 @@
 ﻿@using MyBlazor.Client.WorkerServices
-@inject VersionCheckService VersionCheckService 
+@inject VersionCheckService VersionCheckService
 
-<p>Version : @_version</p>
+<p>Version : @_version?.Version</p>
 
 @code {
   private VersionInfo? _version;
 
-  protected override async Task OnInitializedAsync()
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
   {
-    _version = await VersionCheckService.GetLocalVersionAsync();
+    if (firstRender)
+    {
+      _version = await VersionCheckService.GetLocalVersionAsync();
+      StateHasChanged(); // Trigger a re-render to display the version
+    }
   }
 }

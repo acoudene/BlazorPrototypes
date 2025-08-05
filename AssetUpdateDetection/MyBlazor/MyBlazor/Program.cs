@@ -1,6 +1,5 @@
 using Blazored.LocalStorage;
 using MudBlazor.Services;
-using MyBlazor.Client.Pages;
 using MyBlazor.Client.WorkerServices;
 using MyBlazor.Components;
 
@@ -10,23 +9,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
-//builder.Services.AddScoped<VersionCheckService>();
+builder.Services.AddScoped<VersionCheckService>();
 builder.Services.AddMudServices();
-//builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddScoped(sp => new HttpClient() { BaseAddress = new Uri(@"https://localhost:7275") });
+builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
+  app.UseWebAssemblyDebugging();
 }
 else
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+  app.UseExceptionHandler("/Error", createScopeForErrors: true);
+  // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+  app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -50,5 +50,7 @@ app.MapRazorComponents<App>()
 //    }
 //  }
 //});
+
+app.MapControllers();
 
 app.Run();
