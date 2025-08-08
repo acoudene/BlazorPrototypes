@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using MyBlazor.Client.Shared
+@* @inject HttpClient Http
+@inject IJSRuntime JS *@
 
 <PageTitle>Home</PageTitle>
 
@@ -6,5 +9,87 @@
 
 Welcome to your new app.
 
-<img src="favicon.png" alt="Blazor" />
-<img src="img/batman-figurine.jpg" alt="Batman" />
+<VersionedImg src="favicon.png" alt="Blazor" />
+<VersionedImg src="img/batman-figurine.jpg" alt="Batman" />
+
+@****** Tryouts after ******@
+
+
+@* <button @onclick="SubmitPostWithToken">POST sécurisé</button> *@
+
+@* <form method="POST" id="refreshForm" @formname="refreshForm" action="javascript:location.reload();">
+  <AntiforgeryToken />  
+  <button type="submit">Refresh</button>  
+</form> *@
+
+@* @* <script>
+  document.getElementById("refreshForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // Empêche le POST classique
+
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+      method: "POST",
+      body: formData
+    }).then(() => {
+      location.reload(); // Recharge après soumission
+    });
+  });
+</script> *@
+@*
+<script>
+  function submitSecureForm(token) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = window.location.href;    
+    form.setAttribute('@@formname', 'secureRefreshForm');
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = '__RequestVerificationToken';
+    input.value = token;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+  }
+</script> *@
+
+@code {
+
+  // private void Refresh()
+  // {
+
+  // }
+
+  // private string? _token = string.Empty;
+
+  // protected override async Task OnInitializedAsync()
+  // {
+  //   _token = await GetTokenAsync();
+  // }
+
+  // private async Task<string?> GetTokenAsync()
+  // {
+  //   var response = await Http.GetFromJsonAsync<AntiforgeryResponse>("api/antiforgery");
+  //   return response?.Token;
+  // }
+
+  // private async Task SubmitPostWithToken()
+  // {
+  //   var response = await Http.GetFromJsonAsync<AntiforgeryResponse>("api/antiforgery");
+  //   var token = response?.Token;
+
+  //   if (string.IsNullOrWhiteSpace(token))
+  //   {
+  //     return;
+  //   }
+
+  //   await JS.InvokeVoidAsync("submitSecureForm", token);
+  // }
+
+  // private sealed class AntiforgeryResponse
+  // {
+  //   public string? Token { get; set; }
+  // }
+}

@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped<VersionCheckService>();
+builder.Services.AddScoped<IVersionCheckService, VersionCheckService>();
 builder.Services.AddMudServices();
 builder.Services.AddBlazoredLocalStorage();
 

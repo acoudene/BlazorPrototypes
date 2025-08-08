@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MyBlazor.Client.WorkerServices
+@inherits ComponentBase
+@inject IVersionCheckService VersionCheckService
+
+<img src="@VersionedSrc" @attributes="AdditionalAttributes" />
+
+@code {
+  [Parameter] public string Src { get; set; } = string.Empty;
+  [Parameter(CaptureUnmatchedValues = true)] public required Dictionary<string, object> AdditionalAttributes { get; set; }
+
+  private string VersionedSrc => $"{Src}?v={_version?.Version}";
+
+  private VersionInfo? _version;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      // This is just to ensure the service is injected and used.
+      _version = await VersionCheckService.GetLocalVersionAsync();
+      StateHasChanged();
+    }
+
+    await base.OnAfterRenderAsync(firstRender);
+  }
+}

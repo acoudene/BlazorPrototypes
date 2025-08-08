@@ -3,7 +3,7 @@
 using Blazored.LocalStorage;
 using System.Net.Http.Json;
 
-public class VersionCheckService
+public class VersionCheckService : IVersionCheckService
 {
   private readonly HttpClient _httpClient;
   private readonly ILocalStorageService _localStorage;
