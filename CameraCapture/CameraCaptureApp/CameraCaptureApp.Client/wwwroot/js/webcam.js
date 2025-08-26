@@ -1,13 +1,27 @@
-﻿window.captureImageFromCamera = async function () {
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const context = canvas.getContext('2d');
-
-  if (!video.srcObject) {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    video.srcObject = stream;
+﻿function startVideo(src) {
+  if (navigator.mediaDevices?.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+      let video = document.getElementById(src);
+      if ("srcObject" in video) {
+        video.srcObject = stream;
+      } else {
+        video.src = window.URL.createObjectURL(stream);
+      }
+      video.onloadedmetadata = function (e) {
+        video.play();
+      };
+      //mirror image
+      video.style.webkitTransform = "scaleX(-1)";
+      video.style.transform = "scaleX(-1)";
+    });
   }
+}
 
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  return canvas.toDataURL('image/png');
-};
+function getFrame(src, dest, dotNetHelper) {
+  let video = document.getElementById(src);
+  let canvas = document.getElementById(dest);
+  canvas.getContext('2d').drawImage(video, 0, 0, 320, 240);
+
+  let dataUrl = canvas.toDataURL("image/jpeg");
+  dotNetHelper.invokeMethodAsync('ProcessImage', dataUrl);
+}
