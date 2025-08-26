@@ -1,0 +1,46 @@
+﻿@page "/cameracapture"
+
+<PageTitle>Camera Capture</PageTitle>
+
+<MudForm @ref="_form">
+  @* <MudTextField Label="Nom" @bind-Value="model.Name" /> *@
+
+  <div>
+    <video id="video" autoplay playsinline width="320" height="240"></video>
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+    <MudButton OnClick="CaptureImageAsync">📸 Capture</MudButton>
+  </div>
+
+  <MudButton OnClick="SubmitFormAsync">Send</MudButton>
+</MudForm>
+
+@if (!string.IsNullOrEmpty(_capturedImage))
+{
+  <img src="@_capturedImage" alt="Image capturée" />
+}
+
+
+@code {
+
+
+  private MudForm? _form;
+  private string? _capturedImage;
+
+  [Inject] 
+  public required IJSRuntime JsRuntime { get; init; }
+
+  private async Task CaptureImageAsync()
+  {
+    _capturedImage = await JsRuntime.InvokeAsync<string>("captureImageFromCamera");
+  }
+
+  private async Task SubmitFormAsync()
+  {
+    if (_form is null)
+      return;
+    await _form.Validate();
+    
+    // Traitement du formulaire avec l’image capturée
+  }
+
+}
