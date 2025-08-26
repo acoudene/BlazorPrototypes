@@ -11,7 +11,7 @@
         video.play();
       };
       //mirror image
-      video.style.webkitTransform = "scaleX(-1)";
+      video.style.webkitTransform = "scaleX(-1)"; // Deprecated: to remove in future
       video.style.transform = "scaleX(-1)";
     });
   }
