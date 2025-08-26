@@ -1,5 +1,7 @@
-using CameraCaptureApp.Client.Pages;
 using CameraCaptureApp.Components;
+using CameraCaptureApp.Models;
+using CameraCaptureApp.Persistance.Context;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,9 @@ builder.Services.AddMudServices();
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddDbContext<PhotoCaptureDbContext>(opt => opt.UseInMemoryDatabase("PhotoCapturesDatabase"));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -20,13 +25,13 @@ app.MapDefaultEndpoints();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
+  app.UseWebAssemblyDebugging();
 }
 else
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+  app.UseExceptionHandler("/Error", createScopeForErrors: true);
+  // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+  app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -38,5 +43,23 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(CameraCaptureApp.Client._Imports).Assembly);
+
+app.MapGet("/api/photocaptures", async (PhotoCaptureDbContext dbContext) =>
+    await dbContext.PhotoCaptures.ToListAsync());
+
+app.MapGet("/api/photocaptures/{id}", async (int id, PhotoCaptureDbContext dbContext) =>
+    await dbContext.PhotoCaptures.FindAsync(id)
+        is PhotoCapture photoCapture
+            ? Results.Ok(photoCapture)
+            : Results.NotFound());
+
+
+app.MapPost("/api/photocaptures", async (PhotoCapture photoCapture, PhotoCaptureDbContext dbContext) =>
+{
+  dbContext.PhotoCaptures.Add(photoCapture);
+  await dbContext.SaveChangesAsync();
+
+  return Results.Created($"/api/photocaptures/{photoCapture.Id}", photoCapture);
+});
 
 app.Run();
