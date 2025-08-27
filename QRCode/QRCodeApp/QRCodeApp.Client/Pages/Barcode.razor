@@ -60,7 +60,7 @@
 
       <MudText>Version</MudText>
       <SfNumericTextBox TValue="int" Value="@_vesionNo" Format="n0" Decimals=0 Min=0 Max=40 Step=1 Width="155%">
-        <NumericTextBoxEvents TValue="int" ValueChange="versionChanged" />
+        <NumericTextBoxEvents TValue="int" ValueChange="OnVersionChanged" />
       </SfNumericTextBox>
       <MudText>Error Correction Level</MudText>
       <SfDropDownList TValue="string" TItem="CorrectionLevel" @bind-Value="@_level" DataSource="@_correctionLevel" Width="140%">
@@ -158,7 +158,7 @@
     else
       _textVisibility = false;
   }
-  public void versionChanged(Syncfusion.Blazor.Inputs.ChangeEventArgs<int> args)
+  public void OnVersionChanged(Syncfusion.Blazor.Inputs.ChangeEventArgs<int> args)
   {
     int value = args.Value; _vesionNo = args.Value;
     if (value >= 0 && value <= 40)
