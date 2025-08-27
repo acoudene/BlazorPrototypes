@@ -10,3 +10,7 @@ Une orchestration par .Net Aspire va lancer :
 - Une utilisation d'un nuget ImageSharp pour reconstruire l'image
 - Une API permettant de stocker les données du formulaire et la photo
 - Un stockage en BDD mémoire avec EF Core.
+
+# Référence
+
+- Partie capture : https://wellsb.com/csharp/aspnet/blazor-webcam-capture
