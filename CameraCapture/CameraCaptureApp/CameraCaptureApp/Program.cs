@@ -1,6 +1,8 @@
+using CameraCaptureApp.Client.ViewModels;
 using CameraCaptureApp.Components;
 using CameraCaptureApp.Models;
 using CameraCaptureApp.Persistance.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 
@@ -17,6 +19,10 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddDbContext<PhotoCaptureDbContext>(opt => opt.UseInMemoryDatabase("PhotoCapturesDatabase"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<CameraCaptureViewModel>();
 
 var app = builder.Build();
 
@@ -47,15 +53,27 @@ app.MapRazorComponents<App>()
 app.MapGet("/api/photocaptures", async (PhotoCaptureDbContext dbContext) =>
     await dbContext.PhotoCaptures.ToListAsync());
 
-app.MapGet("/api/photocaptures/{id}", async (int id, PhotoCaptureDbContext dbContext) =>
+app.MapGet("/api/photocaptures/{id}", async (Guid id, PhotoCaptureDbContext dbContext) =>
     await dbContext.PhotoCaptures.FindAsync(id)
         is PhotoCapture photoCapture
             ? Results.Ok(photoCapture)
             : Results.NotFound());
 
 
-app.MapPost("/api/photocaptures", async (PhotoCapture photoCapture, PhotoCaptureDbContext dbContext) =>
+app.MapPost("/api/photocaptures/image", async (HttpRequest request, PhotoCaptureDbContext dbContext) =>
 {
+
+  using var reader = new StreamReader(request.Body);
+  string? dataUri = await reader.ReadToEndAsync();
+  if (string.IsNullOrWhiteSpace(dataUri))
+    return TypedResults.NoContent();
+
+  var photoCapture = new PhotoCapture
+  {
+    Id = Guid.NewGuid(),
+    Timestamp = DateTimeOffset.UtcNow,
+    DataUri = dataUri
+  };
   dbContext.PhotoCaptures.Add(photoCapture);
   await dbContext.SaveChangesAsync();
 

@@ -1,4 +1,5 @@
 ﻿@page "/cameracapture"
+@using CameraCaptureApp.Client.ViewModels
 @using SixLabors.ImageSharp
 @using SixLabors.ImageSharp.Drawing
 @using SixLabors.ImageSharp.Drawing.Processing
@@ -10,24 +11,41 @@
 
 <PageTitle>Camera Capture</PageTitle>
 
-<video id="videoFeed" width="320" height="240" />
-<canvas class="d-none" id="currentFrame" width="320" height="240" />
-<br />
-<button class="btn btn-primary mb-3" @onclick="CaptureFrameAsync">Capture Frame</button>
-<br />
 
-@if (!string.IsNullOrWhiteSpace(_frameUri))
-{
-  <img src="@_frameUri" />
-}
+<MudStack>
+  <MudPaper>
+    <video id="videoFeed" width="320" height="240" />
+  </MudPaper>
+  <MudPaper>
+    <canvas class="d-none" id="currentFrame" width="320" height="240" />
+  </MudPaper>
+  <MudPaper>
+    <MudButton Variant="Variant.Filled" @onclick="CaptureFrameAsync">Capture Frame</MudButton>
+  </MudPaper>
+
+  @if (!string.IsNullOrWhiteSpace(_frameDataUri))
+  {
+    <MudPaper>
+      <img src="@_frameDataUri" width="320" height="240" />
+    </MudPaper>
+    <MudPaper>
+      <MudButton Variant="Variant.Filled" @onclick="SaveAsync">Save</MudButton>
+    </MudPaper>
+  }
+</MudStack>
 
 @code {
 
   [Inject]
   public required IJSRuntime JsRuntime { get; init; }
 
-  private string? _frameUri;
+  [Inject]
+  public required CameraCaptureViewModel ViewModel { get; init; }
 
+  [Inject]
+  public required ISnackbar Snackbar { get; init; }
+
+  private string? _frameDataUri;
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
@@ -54,7 +72,22 @@
         .Flip(FlipMode.Horizontal) //To match mirrored webcam image
         .Fill(Color.ParseHex("0008"), new RectangularPolygon(0, 220, 320, 20)) //Set footer bar for caption
         );
-    _frameUri = image.ToBase64String(JpegFormat.Instance);
+    _frameDataUri = image.ToBase64String(JpegFormat.Instance);
+  }
 
+  public async Task SaveAsync()
+  {
+    if (string.IsNullOrWhiteSpace(_frameDataUri))
+      return;
+
+    try
+    {
+      var apiUri = await ViewModel.StorePhotoAsync(_frameDataUri);
+      Snackbar.Add($"Photo saved: {apiUri}", Severity.Success);
+    }
+    catch (Exception ex)
+    {
+      Snackbar.Add($"Error saving photo: {ex.Message}", Severity.Error);
+    }
   }
 }
