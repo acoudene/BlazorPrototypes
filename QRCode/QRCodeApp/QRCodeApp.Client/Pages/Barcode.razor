@@ -10,240 +10,69 @@
 
 <h3>Barcode</h3>
 
-<div class="col-lg-9 control-section" style="width: 64%;height:600px">
-  <div class="center">
-    <div class="centercontrol">
-      <SfQRCodeGenerator @ref="_qRCodeGenerator" Width="@_barcodeWidth" Height="@_barcodeHeight" Value="@_qrcodeValue" BackgroundColor="@_backgroundColor" ForeColor="@_foreColor" Version="@_version" ErrorCorrectionLevel="@_errorCorrectionLevel">
-        <QRCodeGeneratorDisplayText Text="@_qrcodeValue" Visibility="@_textVisibility">
-          <QRCodeTextMargin Top="@_topTextMargin" Bottom="@_bottomTextMargin"></QRCodeTextMargin>
-        </QRCodeGeneratorDisplayText>
-        <QRCodeLogo ImageSource="@_base64Image"></QRCodeLogo>
-        <QRMargin Left="@_leftMargin" Top="@_topMargin" Right="@_rightMargin" Bottom="@_bottomMargin"></QRMargin>
-      </SfQRCodeGenerator>
-    </div>
-  </div>
-</div>
-<div class="col-lg-3 property-section" style="padding-right: 0px; min-width:36%;border-left:1px solid #D7D7D7; height:630px">
-  <div class="property-panel-header">
-    Appearance
-  </div>
-  <div id="propertypanel">
-    <div class="property-section-content">
-      <div class="row sb-child-row">
-        <div class="col-xs-2 top barcode-panel-left">
-          Value
-        </div>
-        <div class="col-xs-10">
-          <SfTextBox Value="@_qrcodeValue" OnInput="@QRcodeValueChange" CssClass="@CssClass" Width="103%"></SfTextBox>
-        </div>
-      </div>
-      <div class="row sb-child-row">
-        <div>
-          <div class="col-xs-2 top barcode-panel-left">
-            Width
-          </div>
-          <div class="col-xs-4 barcode-panel-left">
-            <SfNumericTextBox TValue="double" Value="@_width" Format="n0" Decimals=0 Min=0 Step=5 Width="110%">
-              <NumericTextBoxEvents TValue="double" ValueChange="BarcodeWidthChanged" />
-            </SfNumericTextBox>
-          </div>
-        </div>
-        <div>
-          <div class="col-xs-2 top barcode-panel-left">
-            Height
-          </div>
-          <div class="col-xs-4 barcode-panel-left">
-            <SfNumericTextBox TValue="double" Value="@_height" Format="n0" Decimals=0 Min=0 Step=5 Width="110%">
-              <NumericTextBoxEvents TValue="double" ValueChange="BarcodeHeightChanged" />
-            </SfNumericTextBox>
-          </div>
-        </div>
-      </div>
-      <div class="row sb-child-row">
-        <div>
-          <div class="col-xs-3 top barcode-panel-left">
-            Background Color
-          </div>
-          <div class="col-xs-3 top barcode-panel-left">
-            <SfColorPicker @bind-Value="@_backgroundColor" ValueChange="BackgroundColorChange"></SfColorPicker>
-          </div>
-        </div>
-        <div>
-          <div class="col-xs-3 top barcode-panel-left">
-            Fore Color
-          </div>
-          <div class="col-xs-3 top barcode-panel-left">
-            <SfColorPicker @bind-Value="@_foreColor" ValueChange="ForeColorChange"></SfColorPicker>
-          </div>
-        </div>
-      </div>
-      <div class="row sb-child-row">
-        <div class="col-xs-3 top barcode-panel-left">
-          Text Visibility
-        </div>
-        <div class="col-xs-3" style="margin-top:6px">
-          <SfCheckBox Checked="@_textVisibility" ValueChange="TextVisibilityChange" TChecked="bool"></SfCheckBox>
-        </div>
-      </div>
-      <div class="property-panel-header">
-        Margin
-      </div>
-      <div class="row sb-child-row">
-        <div>
-          <div class="col-xs-2 top barcode-panel-left">
-            Left
-          </div>
-          <div class="col-xs-4 barcode-panel-left">
-            <SfNumericTextBox TValue="double" Value="@_leftMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
-              <NumericTextBoxEvents TValue="double" ValueChange="LeftMarginChanged" />
-            </SfNumericTextBox>
-          </div>
-        </div>
-        <div>
-          <div class="col-xs-2 top barcode-panel-left">
-            Right
-          </div>
-          <div class="col-xs-4 barcode-panel-left">
-            <SfNumericTextBox TValue="double" Value="@_rightMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
-              <NumericTextBoxEvents TValue="double" ValueChange="RightMarginChanged" />
-            </SfNumericTextBox>
-          </div>
-        </div>
-      </div>
-      <div class="row sb-child-row">
-        <div>
-          <div class="col-xs-2 top barcode-panel-left">
-            Top
-          </div>
-          <div class="col-xs-4 barcode-panel-left">
-            <SfNumericTextBox TValue="double" Value="@_topMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
-              <NumericTextBoxEvents TValue="double" ValueChange="TopMarginChanged" />
-            </SfNumericTextBox>
-          </div>
-        </div>
-        <div>
-          <div class="col-xs-2 top barcode-panel-left">
-            Bottom
-          </div>
-          <div class="col-xs-4 barcode-panel-left">
-            <SfNumericTextBox TValue="double" Value="@_bottomMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
-              <NumericTextBoxEvents TValue="double" ValueChange="BottomMarginChanged" />
-            </SfNumericTextBox>
-          </div>
-        </div>
-      </div>
-      <div class="row sb-child-row">
-        <div>
-          <div class="col-xs-2 top barcode-panel-left" style="width:42%">
-            Version
-          </div>
-          <div class="col-xs-4 barcode-panel-left" style="width:42%">
-            <SfNumericTextBox TValue="int" Value="@_vesionNo" Format="n0" Decimals=0 Min=0 Max=40 Step=1 Width="155%">
-              <NumericTextBoxEvents TValue="int" ValueChange="versionChanged" />
-            </SfNumericTextBox>
-          </div>
-        </div>
-      </div>
-      <div class="row sb-child-row">
-        <div>
-          <div class="col-xs-2 top barcode-panel-left" style="width:42%">
-            Error Correction Level
-          </div>
-          <div class="col-xs-4 barcode-panel-left" style="width:46%">
-            <SfDropDownList TValue="string" TItem="CorrectionLevel" @bind-Value="@_level" DataSource="@_correctionLevel" Width="140%">
-              <DropDownListFieldSettings Value="correction" Text="correction"></DropDownListFieldSettings>
-              <DropDownListEvents TValue="string" TItem="CorrectionLevel" ValueChange="OnErrorCorrectionLevelChanged"></DropDownListEvents>
-            </SfDropDownList>
-          </div>
-        </div>
-      </div>
-      <div class="row sb-child-row" style="padding-top:20px">
-        <div class="col-xs-4 barcode-panel-left">
-          <SfButton @onclick="ExportBarcode" Content="Download" iconCss="e-icons e-download"></SfButton>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<style>
-  .centercontrol {
-    margin: auto;
-    width: 50%;
-    padding-left: 12%;
-    padding-top: 5%;
-    height: 50%;
-  }
+<MudGrid>
+  <MudItem>
+    <SfQRCodeGenerator @ref="_qRCodeGenerator" Width="@_barcodeWidth" Height="@_barcodeHeight" Value="@_qrcodeValue" BackgroundColor="@_backgroundColor" ForeColor="@_foreColor" Version="@_version" ErrorCorrectionLevel="@_errorCorrectionLevel">
+      <QRCodeGeneratorDisplayText Text="@_qrcodeValue" Visibility="@_textVisibility">
+        <QRCodeTextMargin Top="@_topTextMargin" Bottom="@_bottomTextMargin"></QRCodeTextMargin>
+      </QRCodeGeneratorDisplayText>
+      <QRCodeLogo ImageSource="@_base64Image"></QRCodeLogo>
+      <QRMargin Left="@_leftMargin" Top="@_topMargin" Right="@_rightMargin" Bottom="@_bottomMargin"></QRMargin>
+    </SfQRCodeGenerator>
+  </MudItem>
+  <MudItem>
+    <MudStack>
+      <MudText Typo="Typo.h6">Appearance</MudText>
+      <MudText>Value</MudText>
+      <SfTextBox Value="@_qrcodeValue" OnInput="@QRcodeValueChange" CssClass="@CssClass" Width="103%"></SfTextBox>
+      <MudText>Width</MudText>
+      <SfNumericTextBox TValue="double" Value="@_width" Format="n0" Decimals=0 Min=0 Step=5 Width="110%">
+        <NumericTextBoxEvents TValue="double" ValueChange="BarcodeWidthChanged" />
+      </SfNumericTextBox>
+      <MudText>Height</MudText>
+      <SfNumericTextBox TValue="double" Value="@_height" Format="n0" Decimals=0 Min=0 Step=5 Width="110%">
+        <NumericTextBoxEvents TValue="double" ValueChange="BarcodeHeightChanged" />
+      </SfNumericTextBox>
+      <MudText>Background Color</MudText>
+      <SfColorPicker @bind-Value="@_backgroundColor" ValueChange="BackgroundColorChange"></SfColorPicker>
+      <MudText>Fore Color</MudText>
+      <SfColorPicker @bind-Value="@_foreColor" ValueChange="ForeColorChange"></SfColorPicker>
+      <MudText>Text Visibility</MudText>
+      <SfCheckBox Checked="@_textVisibility" ValueChange="TextVisibilityChange" TChecked="bool"></SfCheckBox>
 
-  .top {
-    margin-top: 10px;
-  }
+      <MudText Typo="Typo.h6">Margin</MudText>
+      <MudText>Left</MudText>
+      <SfNumericTextBox TValue="double" Value="@_leftMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
+        <NumericTextBoxEvents TValue="double" ValueChange="LeftMarginChanged" />
+      </SfNumericTextBox>
+      <MudText>Right</MudText>
+      <SfNumericTextBox TValue="double" Value="@_rightMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
+        <NumericTextBoxEvents TValue="double" ValueChange="RightMarginChanged" />
+      </SfNumericTextBox>
+      <MudText>Top</MudText>
+      <SfNumericTextBox TValue="double" Value="@_topMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
+        <NumericTextBoxEvents TValue="double" ValueChange="TopMarginChanged" />
+      </SfNumericTextBox>
+      <MudText>Bottom</MudText>
+      <SfNumericTextBox TValue="double" Value="@_bottomMargin" Format="n0" Decimals=0 Min=-10 Max=30 Step=1 Width="110%">
+        <NumericTextBoxEvents TValue="double" ValueChange="BottomMarginChanged" />
+      </SfNumericTextBox>
 
-  .sb-child-row {
-    margin-top: 8px;
-  }
+      <MudText>Version</MudText>
+      <SfNumericTextBox TValue="int" Value="@_vesionNo" Format="n0" Decimals=0 Min=0 Max=40 Step=1 Width="155%">
+        <NumericTextBoxEvents TValue="int" ValueChange="versionChanged" />
+      </SfNumericTextBox>
+      <MudText>Error Correction Level</MudText>
+      <SfDropDownList TValue="string" TItem="CorrectionLevel" @bind-Value="@_level" DataSource="@_correctionLevel" Width="140%">
+        <DropDownListFieldSettings Value="Correction" Text="Correction"></DropDownListFieldSettings>
+        <DropDownListEvents TValue="string" TItem="CorrectionLevel" ValueChange="OnErrorCorrectionLevelChanged"></DropDownListEvents>
+      </SfDropDownList>
+      
+      <SfButton @onclick="ExportBarcode" Content="Download" iconCss="e-icons e-download"></SfButton>
+    </MudStack>
+  </MudItem>
+</MudGrid>
 
-  .col-xs-2 {
-    width: 16.66666667%;
-  }
-
-  .allowedText {
-    margin-left: 14px;
-    margin-right: 17px;
-    margin-top: 14px;
-    width: auto;
-    height: auto;
-  }
-
-  .row {
-    margin-left: 0px;
-    margin-right: 0px;
-    display: block;
-  }
-
-  .texstyle {
-    display: table;
-    height: 35px;
-    padding-right: 4px;
-    padding-left: 0px;
-    width: 50%;
-    padding-top: 15px;
-    float: left;
-    position: relative;
-    min-height: 1px;
-  }
-
-  .col-xs-6 {
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 5px;
-    float: left;
-  }
-
-  .property-section {
-    padding-bottom: 20px;
-    height: 740px;
-    padding-right: 0px;
-    display: inline-block;
-  }
-
-  .center {
-    margin-left: 14px;
-    margin-right: 17px;
-    margin-top: 14px;
-    min-width: 280px;
-    width: auto;
-    border: 2px solid lightgray;
-    min-height: 55%;
-    padding-top: 35px;
-  }
-
-  @@media screen and (max-width: 570px) {
-    .centercontrol {
-      width: 60%;
-      padding-left: 0px;
-    }
-  }
-</style>
 @code
 {
   private string _qrcodeValue = "Anthony";
