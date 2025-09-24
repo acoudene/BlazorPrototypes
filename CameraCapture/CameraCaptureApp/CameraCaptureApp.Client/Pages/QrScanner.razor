@@ -1,0 +1,38 @@
+﻿@page "/qrscanner"
+
+<h3>Scanner un QR Code</h3>
+
+<div id="reader" style="width:300px;"></div>
+
+<p>Résultat : @result</p>
+
+@code {
+  private string? result;
+
+  private DotNetObjectReference<QrScanner>? objRef;
+  
+  [Inject]
+  public required IJSRuntime JsRuntime { get; init; }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      objRef = DotNetObjectReference.Create(this);
+      await JsRuntime.InvokeVoidAsync("qrScanner.start", objRef, "reader");
+    }
+  }
+
+  [JSInvokable]
+  public void OnQrCodeScanned(string text)
+  {
+    result = text;
+    StateHasChanged();
+  }
+
+  public async ValueTask DisposeAsync()
+  {
+    await JsRuntime.InvokeVoidAsync("qrScanner.stop");
+    objRef?.Dispose();
+  }
+}
