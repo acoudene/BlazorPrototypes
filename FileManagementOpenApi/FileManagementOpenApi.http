@@ -1,0 +1,6 @@
+@FileManagementOpenApi_HostAddress = http://localhost:5276
+
+GET {{FileManagementOpenApi_HostAddress}}/FilesController/
+Accept: application/json
+
+###
