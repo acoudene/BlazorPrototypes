@@ -245,7 +245,7 @@ public interface IStampChangeNotifier
 ### Côté client - classe de notification - implémentation SnackBar
 
 ```csharp
-public class LightSnackBarChangeNotifier : IStampChangeNotifier
+public class LightSnackBarStampChangeNotifier : IStampChangeNotifier
 {
     private readonly ISnackbar _snackbar;
     private readonly IJSRuntime _jsRuntime;
@@ -310,7 +310,7 @@ public class LightSnackBarChangeNotifier : IStampChangeNotifier
 /// 
 builder.Services.AddHttpClient<HttpAuthoritativeStampClient>(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
 builder.Services.AddScoped<LocalStorageCachedStampClient>();
-builder.Services.AddScoped<IStampChangeNotifier, LightSnackBarChangeNotifier>();
+builder.Services.AddScoped<IStampChangeNotifier, LightSnackBarStampChangeNotifier>();
 builder.Services.AddScoped<PollingStampCheckService>();
 ```
 
