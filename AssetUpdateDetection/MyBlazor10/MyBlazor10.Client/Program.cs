@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using MyBlazor10.Client.WorkerServices;
@@ -5,6 +6,7 @@ using MyBlazor10.Client.WorkerServices;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services.AddMudServices();
+builder.Services.AddBlazoredLocalStorage();
 
 ///
 /// Stamp
