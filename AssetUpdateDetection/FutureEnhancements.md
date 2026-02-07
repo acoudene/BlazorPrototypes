@@ -250,7 +250,7 @@ public class LightSnackBarStampChangeNotifier : IStampChangeNotifier
     private readonly ISnackbar _snackbar;
     private readonly IJSRuntime _jsRuntime;
 
-    public LightSnackBarChangeNotifier(
+    public LightSnackBarStampChangeNotifier(
       ISnackbar snackbar,
       IJSRuntime jSRuntime)
     {
