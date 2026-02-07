@@ -1,0 +1,18 @@
+﻿@implements IDisposable
+@inject PollingStampCheckService StampPoller
+
+@code {
+  protected override Task OnInitializedAsync()
+  {
+    _ = StampPoller.StartAsync()
+        .ContinueWith(t => Console.Error.WriteLine(t.Exception),
+            TaskContinuationOptions.OnlyOnFaulted);
+
+    return Task.CompletedTask;
+  }
+
+  public void Dispose()
+  {
+    _ = StampPoller.DisposeAsync();
+  }
+}

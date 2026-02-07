@@ -9,7 +9,30 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyBlazor10.Client\MyBlazor10.Client.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.2" />
   </ItemGroup>
 
+  <Target Name="GenerateStampInfoJson" AfterTargets="Build;Publish">
+    <PropertyGroup>
+
+      <StampInfoFilePath>wwwroot\stampInfo.json</StampInfoFilePath>
+
+      <!-- Date UTC au format JSON/RFC3339 (ISO 8601) -->
+      <UpdatedAtUtcIso>$([System.DateTimeOffset]::UtcNow.ToString("O"))</UpdatedAtUtcIso>
+
+      <!-- Même instant, format compact triable pour l'identifiant -->
+      <UpdatedAtUtcStamp>$([System.DateTimeOffset]::Parse('$(UpdatedAtUtcIso)').ToString("yyyyMMddHHmmssfff"))</UpdatedAtUtcStamp>
+
+      <!-- Identifiant triable -->
+      <Identifier>$(UpdatedAtUtcStamp)-$([System.Guid]::NewGuid().ToString("N"))</Identifier>
+
+      <!-- JSON (mets des virgules + guillemets corrects) -->
+      <GeneratedStampInfo>{ "updatedAt": "$(UpdatedAtUtcIso)", "identifier": "$(Identifier)" }</GeneratedStampInfo>
+
+    </PropertyGroup>
+
+    <Message Text="Stamp identifier: $(Identifier)" Importance="high" />
+
+    <WriteLinesToFile File="$(StampInfoFilePath)" Lines="$(GeneratedStampInfo)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
 </Project>
